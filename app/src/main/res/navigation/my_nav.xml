@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.trabajofinalv2.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_pantallaDeInicio"
+            app:destination="@id/pantallaDeInicio" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="com.example.trabajofinalv2.ui.theme.onboarding.ViewPagerFragment"
+        android:label="fragment_view_pager"
+        tools:layout="@layout/fragment_view_pager" >
+        <action
+            android:id="@+id/action_viewPagerFragment_to_pantallaDeInicio"
+            app:destination="@id/pantallaDeInicio" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaDeInicio"
+        android:name="com.example.trabajofinalv2.PantallaDeInicio"
+        android:label="fragment_pantalla_de_inicio"
+        tools:layout="@layout/fragment_pantalla_de_inicio" />
+</navigation>
