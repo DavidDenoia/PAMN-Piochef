@@ -30,5 +30,18 @@
         android:id="@+id/pantallaDeInicio"
         android:name="com.example.trabajofinalv2.PantallaDeInicio"
         android:label="fragment_pantalla_de_inicio"
-        tools:layout="@layout/fragment_pantalla_de_inicio" />
+        tools:layout="@layout/fragment_pantalla_de_inicio" >
+        <action
+            android:id="@+id/action_pantallaDeInicio_to_pantallaDeRegistro"
+            app:destination="@id/pantallaDeRegistro" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaDeRegistro"
+        android:name="com.example.trabajofinalv2.Registro"
+        android:label="fragment_pantalla_de_registro"
+        tools:layout="@layout/fragment_pantalla_de_registro" >
+        <action
+            android:id="@+id/action_pantallaDeRegistro_to_pantallaDeInicio"
+            app:destination="@id/pantallaDeInicio" />
+    </fragment>
 </navigation>
