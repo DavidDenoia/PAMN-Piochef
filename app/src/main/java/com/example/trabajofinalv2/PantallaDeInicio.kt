@@ -1,5 +1,6 @@
 package com.example.trabajofinalv2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,7 +31,7 @@ class PantallaDeInicio : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
+    @Override
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,10 +40,15 @@ class PantallaDeInicio : Fragment() {
         val view = inflater.inflate(R.layout.fragment_pantalla_de_inicio, container, false)
 
         val btnNext = view.findViewById<Button>(R.id.btnregistrar)
+        val btnolvidar = view.findViewById<Button>(R.id.olvidar)
 
         btnNext.setOnClickListener {
 
             findNavController().navigate(R.id.action_pantallaDeInicio_to_pantallaDeRegistro)
+        }
+        btnolvidar.setOnClickListener {
+
+            findNavController().navigate(R.id.action_pantallaDeInicio_to_pantallaCambiarClave1)
         }
         return view
     }

@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_pantallaDeInicio_to_pantallaDeRegistro"
             app:destination="@id/pantallaDeRegistro" />
+        <action
+            android:id="@+id/action_pantallaDeInicio_to_pantallaCambiarClave1"
+            app:destination="@id/pantallaCambiarClave1" />
     </fragment>
     <fragment
         android:id="@+id/pantallaDeRegistro"
@@ -43,5 +46,31 @@
         <action
             android:id="@+id/action_pantallaDeRegistro_to_pantallaDeInicio"
             app:destination="@id/pantallaDeInicio" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaCambiarClave1"
+        android:name="com.example.trabajofinalv2.RecuperarClave1"
+        android:label="fragment_pantalla_Recuperar_Clave"
+        tools:layout="@layout/fragment_restablecer_password1" >
+        <action
+            android:id="@+id/action_pantallaClave1_to_pantallaClave2"
+            app:destination="@id/pantallaCambiarClave2" />
+    </fragment>
+    <fragment
+        android:id="@+id/pantallaCambiarClave2"
+        android:name="com.example.trabajofinalv2.RecuperarClave2"
+        android:label="fragment_pantalla_recuperar_Clave2"
+        tools:layout="@layout/fragment_restablecer_password2" >
+        <action
+            android:id="@+id/action_pantallaClave2_to_pantallaClave3"
+            app:destination="@id/pantallaCambiarClave3" />
+    </fragment>
+    <fragment android:id="@+id/pantallaCambiarClave3"
+        android:name="com.example.trabajofinalv2.RecuperarClave3"
+        android:label="fragment_pantalla_recuperar_Clave3"
+        tools:layout="@layout/fragment_restablecer_password3" >
+    <action
+        android:id="@+id/action_pantallaClave3_to_pantallaDeInicio"
+        app:destination="@id/pantallaDeInicio" />
     </fragment>
 </navigation>
