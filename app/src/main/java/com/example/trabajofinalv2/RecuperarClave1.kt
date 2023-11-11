@@ -1,6 +1,7 @@
 package com.example.trabajofinalv2
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,6 +25,26 @@ class RecuperarClave1: Fragment() {
         val view = inflater.inflate(R.layout.fragment_restablecer_password1, container, false)
 
         val btnSend = view.findViewById<Button>(R.id.btnEnviar)
+        val inputCorreo = view.findViewById<EditText>(R.id.correoRecuperacion)
+
+        inputCorreo.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                val isValid = isValidEmail(s.toString())
+                btnSend.isEnabled = !s.isNullOrBlank() && isValid
+
+                if (btnSend.isEnabled) {
+                    btnSend.setBackgroundColor(Color.parseColor("#114B8D"))
+                } else {
+                    btnSend.setBackgroundColor(Color.parseColor("#416FA4"))
+                }
+            }
+        })
 
         btnSend.setOnClickListener {
 
