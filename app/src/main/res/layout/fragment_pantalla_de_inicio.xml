@@ -94,15 +94,16 @@
         android:layout_marginBottom="32dp"
         android:maxLines="1"
         android:inputType="text"/>
-    <TextView
+    <Button
         android:id="@+id/olvidar"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:gravity="center"
         android:text="¿Olvido su contaseña?"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:background="#FFFFFF"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/panel"
         app:layout_constraintStart_toStartOf="@+id/panel"
         app:layout_constraintTop_toTopOf="@+id/contrasena"/>
