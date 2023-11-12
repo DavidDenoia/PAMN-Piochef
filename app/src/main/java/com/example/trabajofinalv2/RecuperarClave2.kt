@@ -25,6 +25,7 @@ class RecuperarClave2 : Fragment() {
         val view = inflater.inflate(R.layout.fragment_restablecer_password2, container, false)
 
         val btnSend = view.findViewById<Button>(R.id.btnRestContra)
+        val btnCancel = view.findViewById<Button>(R.id.btnCancelar)
         val inputCodigo = view.findViewById<EditText>(R.id.TextCodigo)
 
         inputCodigo.addTextChangedListener(object: TextWatcher {
@@ -47,6 +48,10 @@ class RecuperarClave2 : Fragment() {
         btnSend.setOnClickListener {
 
             findNavController().navigate(R.id.action_pantallaClave2_to_pantallaClave3)
+        }
+        btnCancel.setOnClickListener {
+
+            findNavController().navigate(R.id.action_pantallaClave2_to_pantallaDeInicio)
         }
         return view
     }

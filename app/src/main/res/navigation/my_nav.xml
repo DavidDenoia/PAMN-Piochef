@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_pantallaClave1_to_pantallaClave2"
             app:destination="@id/pantallaCambiarClave2" />
+        <action
+            android:id="@+id/action_pantallaClave1_to_pantallaDeInicio"
+            app:destination="@id/pantallaDeInicio" />
     </fragment>
     <fragment
         android:id="@+id/pantallaCambiarClave2"
@@ -64,6 +67,9 @@
         <action
             android:id="@+id/action_pantallaClave2_to_pantallaClave3"
             app:destination="@id/pantallaCambiarClave3" />
+        <action
+            android:id="@+id/action_pantallaClave2_to_pantallaDeInicio"
+            app:destination="@id/pantallaDeInicio" />
     </fragment>
     <fragment android:id="@+id/pantallaCambiarClave3"
         android:name="com.example.trabajofinalv2.RecuperarClave3"
