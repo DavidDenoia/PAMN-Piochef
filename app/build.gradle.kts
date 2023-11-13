@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -52,6 +53,8 @@ android {
 dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
+    implementation("com.google.firebase:firebase-auth:22.2.0")
+    implementation("com.google.firebase:firebase-database:20.3.0")
     val appcompat_version = "1.6.1"
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.core:core-ktx:1.9.0")

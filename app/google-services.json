@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "825781453454",
+    "project_id": "piochef-effb5",
+    "storage_bucket": "piochef-effb5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825781453454:android:395759c83a46bc52693fdf",
+        "android_client_info": {
+          "package_name": "com.example.trabajofinalv2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA38jYkmnusVNBDdVI-0XdacnbuNcep5As"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

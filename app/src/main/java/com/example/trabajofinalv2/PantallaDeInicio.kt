@@ -7,30 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PantallaDeInicio.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PantallaDeInicio : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var etEmail: EditText
+    private lateinit var etPass: EditText
+    lateinit var btnLogin: Button
+
+    //Crea un firebaseAuth object
+    lateinit var auth: FirebaseAuth
     @Override
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,37 +28,44 @@ class PantallaDeInicio : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_pantalla_de_inicio, container, false)
 
+        btnLogin = view.findViewById(R.id.btniniciar)
+        etEmail = view.findViewById(R.id.etEmailAddress)
+        etPass = view.findViewById(R.id.etPassword)
+        btnLogin = view.findViewById(R.id.btniniciar)
         val btnNext = view.findViewById<Button>(R.id.btnregistrar)
         val btnolvidar = view.findViewById<Button>(R.id.olvidar)
+
+        //Inicializa la autentificacion de firebase
+        auth = FirebaseAuth.getInstance()
 
         btnNext.setOnClickListener {
 
             findNavController().navigate(R.id.action_pantallaDeInicio_to_pantallaDeRegistro)
         }
+
         btnolvidar.setOnClickListener {
 
             findNavController().navigate(R.id.action_pantallaDeInicio_to_pantallaCambiarClave1)
         }
+
+        btnLogin.setOnClickListener {
+            login()
+        }
         return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PantallaDeInicio.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PantallaDeInicio().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun login(){
+        val email = etEmail.text.toString()
+        val pass = etPass.text.toString()
+
+        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(requireActivity()) {
+            if (it.isSuccessful) {
+                Toast.makeText(requireActivity(), "Iniciada sesion correctamente", Toast.LENGTH_SHORT).show()
+                //Y aqui iria un navigate hacia la pagina del perfil de usuario
+            } else
+                Toast.makeText(requireActivity(), "Fallo en inicio de sesion", Toast.LENGTH_SHORT).show()
+        }
     }
+
+
 }
