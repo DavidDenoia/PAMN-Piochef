@@ -36,6 +36,7 @@ class Registro : Fragment()
     //Objeto de referencia a la base de datos en Firebase
     private  lateinit var database:DatabaseReference
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,7 +56,6 @@ class Registro : Fragment()
 
         // Initialising auth object
         auth = Firebase.auth
-
         database = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").reference
 
         btnSignUp.setOnClickListener {
@@ -91,26 +91,32 @@ class Registro : Fragment()
             return
         }
 
-        auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(requireActivity()) {
-            if (it.isSuccessful) {
-                val user = User(
-                    name,
-                    email
-                ) // Crea un nuevo objeto User con el nombre y correo electrónico proporcionados
-                val userId = auth.currentUser?.uid // Obtiene el UID del usuario recién registrado
+        auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(requireActivity()) { task ->
+            if (task.isSuccessful) {
+                // Usuario creado exitosamente
+                val user = auth.currentUser
+                user?.sendEmailVerification()?.addOnCompleteListener { verifTask ->
+                    if (verifTask.isSuccessful) {
+                        // Correo de verificación enviado
+                        Toast.makeText(requireActivity(), "Verifica tu correo electrónico", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Error al enviar correo de verificación
+                        Toast.makeText(requireActivity(), "Error al enviar correo de verificación: ${verifTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                // Guardar información adicional del usuario en la base de datos
+                val newUser = User(name, email)
+                val userId = user?.uid
                 userId?.let { uid ->
-                    database.child("users").child(uid).setValue(user)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "Nombre y email guardados en la base de datos",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                    database.child("users").child(uid).setValue(newUser)
+                        .addOnCompleteListener { dbTask ->
+                            if (dbTask.isSuccessful) {
+                                Toast.makeText(requireActivity(), "Nombre y email guardados en la base de datos", Toast.LENGTH_SHORT).show()
                                 findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaDeInicio)
                             } else {
-
-                                task.exception?.let {
+                                // Error al guardar en la base de datos
+                                dbTask.exception?.let {
                                     Log.e("RegistroFragment", "Falló al guardar el usuario en la base de datos", it)
                                     Toast.makeText(requireActivity(), "Error al guardar usuario: ${it.message}", Toast.LENGTH_SHORT).show()
                                 }
@@ -118,12 +124,8 @@ class Registro : Fragment()
                         }
                 }
             } else {
-                // Manejar el fracaso del registro
-                Toast.makeText(
-                    requireActivity(),
-                    "Registro fallido: ${it.exception?.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // Error al crear usuario
+                Toast.makeText(requireActivity(), "Registro fallido: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
 
         }

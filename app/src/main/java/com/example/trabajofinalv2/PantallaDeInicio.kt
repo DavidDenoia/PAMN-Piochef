@@ -60,8 +60,15 @@ class PantallaDeInicio : Fragment() {
 
         auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(requireActivity()) {
             if (it.isSuccessful) {
-                Toast.makeText(requireActivity(), "Iniciada sesion correctamente", Toast.LENGTH_SHORT).show()
-                //Y aqui iria un navigate hacia la pagina del perfil de usuario
+                val user = auth.currentUser
+                if(user != null && user.isEmailVerified){
+                    Toast.makeText(requireActivity(), "Iniciada sesion correctamente", Toast.LENGTH_SHORT).show()
+                    //Y aqui iria un navigate hacia la pagina del perfil de usuario
+                }else{
+                    Toast.makeText(requireActivity(), "Verifica tu correo electrónico", Toast.LENGTH_SHORT).show()
+                }
+
+
             } else
                 Toast.makeText(requireActivity(), "Fallo en inicio de sesion", Toast.LENGTH_SHORT).show()
         }

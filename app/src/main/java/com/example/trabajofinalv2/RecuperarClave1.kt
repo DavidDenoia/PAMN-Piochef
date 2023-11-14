@@ -11,11 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 class RecuperarClave1: Fragment() {
-
+    
     @Override
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +51,18 @@ class RecuperarClave1: Fragment() {
         })
 
         btnSend.setOnClickListener {
-
-            findNavController().navigate(R.id.action_pantallaClave1_to_pantallaClave2)
+            val email: String = inputCorreo.text.toString().trim { it <= ' '}
+            if(email.isEmpty()){
+                Toast.makeText(requireActivity(), "Introduce un correo", Toast.LENGTH_SHORT).show()
+            }else{
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        Toast.makeText(requireActivity(), "Email enviado correctamente", Toast.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_pantallaClave1_to_pantallaDeInicio)
+                    }
+                }
+            }
+            //findNavController().navigate(R.id.action_pantallaClave1_to_pantallaClave2)
         }
         btnCancel.setOnClickListener {
 
