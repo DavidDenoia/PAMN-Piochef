@@ -32,6 +32,7 @@
         app:layout_constraintTop_toTopOf="@+id/panel"
         app:layout_constraintStart_toStartOf="@+id/panel"
         />
+
     <View
         android:id="@+id/panel"
         android:layout_width="0dp"
@@ -39,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.9"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -90,6 +91,37 @@
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@+id/numerosseguidores"
         app:layout_constraintLeft_toRightOf="@+id/seguidos"
+        />
+    <TextView
+        android:text="Nombre de usuario"
+        android:id="@+id/username"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        app:layout_constraintLeft_toLeftOf="@+id/image"
+        />
+    <TextView
+        android:text="Descripcion"
+        android:id="@+id/descp"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintLeft_toLeftOf="@+id/username"
+        />
+    <TextView
+        android:text="Mis recetas"
+        android:id="@+id/titlerecetas"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/descp"
+        app:layout_constraintLeft_toLeftOf="@+id/descp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

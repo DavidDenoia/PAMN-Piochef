@@ -11,19 +11,13 @@ import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
 
 
-class PantallaPrincipal : Fragment() {
+class PantallaPerfil : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_pantalla_principal, container, false)
-
-        //Saltar a la siguiente pagina de introduccion
-        val btnInicial = view.findViewById<Button>(R.id.foto)
-        btnInicial.setOnClickListener {
-            findNavController().navigate(R.id.action_pantallaprincipal_to_pantallaperfil)
-        }
+        val view = inflater.inflate(R.layout.fragment_pantalla_perfil, container, false)
 
         return view
     }

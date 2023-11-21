@@ -89,5 +89,13 @@
         android:name="com.example.trabajofinalv2.PantallaPrincipal"
         android:label="fragment_pantallaPrincipal"
         tools:layout="@layout/fragment_pantalla_principal" >
+        <action
+            android:id="@+id/action_pantallaprincipal_to_pantallaperfil"
+            app:destination="@id/pantallaperfil" />
+    </fragment>
+    <fragment android:id="@+id/pantallaperfil"
+        android:name="com.example.trabajofinalv2.PantallaPerfil"
+        android:label="fragment_pantalla_perfil"
+        tools:layout="@layout/fragment_pantalla_perfil" >
     </fragment>
 </navigation>
