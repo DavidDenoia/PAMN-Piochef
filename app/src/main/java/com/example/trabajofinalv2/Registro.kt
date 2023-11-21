@@ -44,7 +44,6 @@ class Registro : Fragment()
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_pantalla_de_registro, container, false)
 
-
         // View Bindings
         etName = view.findViewById<EditText>(R.id.setName)
         etEmail = view.findViewById(R.id.setEmailAddress)
@@ -69,7 +68,6 @@ class Registro : Fragment()
 
             findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaDeInicio)
         }
-
 
 
         return view
@@ -113,7 +111,7 @@ class Registro : Fragment()
                         .addOnCompleteListener { dbTask ->
                             if (dbTask.isSuccessful) {
                                 Toast.makeText(requireActivity(), "Nombre y email guardados en la base de datos", Toast.LENGTH_SHORT).show()
-                                findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaDeInicio)
+                                findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaprincipal)
                             } else {
                                 // Error al guardar en la base de datos
                                 dbTask.exception?.let {
