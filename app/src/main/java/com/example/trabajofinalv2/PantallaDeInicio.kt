@@ -65,7 +65,7 @@ class PantallaDeInicio : Fragment() {
                 if(user != null && user.isEmailVerified){
                     Toast.makeText(requireActivity(), "Iniciada sesion correctamente", Toast.LENGTH_SHORT).show()
                     //Y aqui iria un navigate hacia la pagina del perfil de usuario
-                    findNavController().navigate(R.id.action_pantallaDeInicio_to_pantallaprincipal)
+                    findNavController().navigate(R.id.action_pantallaDeInicio_to_pantallaDeMenu)
                 }else{
                     Toast.makeText(requireActivity(), "Verifica tu correo electrónico", Toast.LENGTH_SHORT).show()
                 }

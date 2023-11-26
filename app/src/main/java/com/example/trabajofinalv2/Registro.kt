@@ -111,7 +111,7 @@ class Registro : Fragment()
                         .addOnCompleteListener { dbTask ->
                             if (dbTask.isSuccessful) {
                                 Toast.makeText(requireActivity(), "Nombre y email guardados en la base de datos", Toast.LENGTH_SHORT).show()
-                                findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaprincipal)
+                                findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaDeMenu)
                             } else {
                                 // Error al guardar en la base de datos
                                 dbTask.exception?.let {

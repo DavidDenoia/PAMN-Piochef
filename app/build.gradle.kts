@@ -73,4 +73,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation( "androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.google.android.material:material:1.10.0")
 }

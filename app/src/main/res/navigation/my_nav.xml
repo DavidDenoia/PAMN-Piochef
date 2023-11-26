@@ -38,8 +38,8 @@
             android:id="@+id/action_pantallaDeInicio_to_pantallaCambiarClave1"
             app:destination="@id/pantallaCambiarClave1" />
         <action
-            android:id="@+id/action_pantallaDeInicio_to_pantallaprincipal"
-            app:destination="@id/pantallaprincipal" />
+            android:id="@+id/action_pantallaDeInicio_to_pantallaDeMenu"
+            app:destination="@id/pantallaMenuInferior" />
     </fragment>
     <fragment
         android:id="@+id/pantallaDeRegistro"
@@ -50,8 +50,8 @@
             android:id="@+id/action_pantallaDeRegistro_to_pantallaDeInicio"
             app:destination="@id/pantallaDeInicio" />
         <action
-            android:id="@+id/action_pantallaDeRegistro_to_pantallaprincipal"
-            app:destination="@id/pantallaprincipal" />
+            android:id="@+id/action_pantallaDeRegistro_to_pantallaDeMenu"
+            app:destination="@id/pantallaMenuInferior" />
     </fragment>
     <fragment
         android:id="@+id/pantallaCambiarClave1"
@@ -97,5 +97,10 @@
         android:name="com.example.trabajofinalv2.PantallaPerfil"
         android:label="fragment_pantalla_perfil"
         tools:layout="@layout/fragment_pantalla_perfil" >
+    </fragment>
+    <fragment android:id="@+id/pantallaMenuInferior"
+        android:name="com.example.trabajofinalv2.BottomNavigation"
+        android:label="fragment_menu_inferior"
+        tools:layout="@layout/fragment_menu_inferior" >
     </fragment>
 </navigation>
