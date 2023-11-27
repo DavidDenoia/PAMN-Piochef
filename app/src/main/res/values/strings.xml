@@ -8,4 +8,6 @@
             3.Escribe el código enviado\n
             4.Si no has recibido el correo, pulsa en “Volver a enviar</string>
     <string name="cambiar_contraseña">Cambiar contraseña</string>
+    <string name="editar_perfil_titulo">Editar perfil</string>
+    <string name="editar_foto">Editar foto</string>
 </resources>
