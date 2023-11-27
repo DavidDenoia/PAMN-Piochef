@@ -10,4 +10,5 @@
     <color name="transparent">#00FF0000</color>
     <!--Custom Colors-->
     <color name="custom_color_primary">#114B8D</color>
+    <color name="red">#BB374F</color>
 </resources>

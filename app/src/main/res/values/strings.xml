@@ -7,4 +7,5 @@
             2.Recibirás un email con un código de verificación\n
             3.Escribe el código enviado\n
             4.Si no has recibido el correo, pulsa en “Volver a enviar</string>
+    <string name="cambiar_contraseña">Cambiar contraseña</string>
 </resources>
