@@ -11,4 +11,6 @@
     <!--Custom Colors-->
     <color name="custom_color_primary">#114B8D</color>
     <color name="red">#BB374F</color>
+    <color name="colorSelected">#88A5C6</color>
+    <color name="colorUnselected">#FFFFFF</color>
 </resources>
