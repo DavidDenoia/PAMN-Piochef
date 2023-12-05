@@ -11,10 +11,13 @@ import android.widget.LinearLayout
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import java.util.Vector
 
 class AnadirReceta2 : Fragment() {
     private var stepCount = 1
-
+    //Crea un firebaseAuth object
+    lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,10 +89,22 @@ class AnadirReceta2 : Fragment() {
 
         nextPageButton.setOnClickListener {
             //pag3
-            findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
+            registraValores()
         }
     }
+    fun registraValores(){
+        //se autentifica
+        auth = FirebaseAuth.getInstance()
+        //funcion pilla todos los datos
+        recogeDatos()
+        //los mete en database
 
+        //una vez metidos navega al siguiente
+        findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
+    }
 
-
+    fun recogeDatos(){
+        var datos = Vector<String>();
+        //pilla todos los datos de la pantalla
+    }
 }
