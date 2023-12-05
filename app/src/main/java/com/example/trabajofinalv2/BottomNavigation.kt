@@ -20,6 +20,9 @@ class BottomNavigation : Fragment(R.layout.fragment_menu_inferior) {
     ): View? {
         val view = View.inflate(requireContext(), R.layout.fragment_menu_inferior, null)
 
+        //establece el fragmento en la pantalla principal al inicio + el fragmento
+        val newFragment = PantallaPrincipal()
+        setCurrentFragment(newFragment)
 
         val bottomNavigationView: BottomNavigationView =
             view.findViewById(R.id.bottomNavigationView)

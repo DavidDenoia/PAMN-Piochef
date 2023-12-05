@@ -102,5 +102,19 @@
         android:name="com.example.trabajofinalv2.BottomNavigation"
         android:label="fragment_menu_inferior"
         tools:layout="@layout/fragment_menu_inferior" >
+        <action
+            android:id="@+id/action_pantallaMenuInferior_to_pantallaEditarPefil"
+            app:destination="@id/pantallaEditarPefil" />
+    </fragment>
+    <fragment android:id="@+id/pantallaEditarPefil"
+        android:name="com.example.trabajofinalv2.EditarPerfil"
+        android:label="fragment_editar_perfil"
+        tools:layout="@layout/fragment_editar_perfil" >
+        <action
+            android:id="@+id/action_pantallaEditarPefil_to_pantallaMenuInferior"
+            app:destination="@id/pantallaMenuInferior" />
+        <action
+            android:id="@+id/action_pantallaEditarPefil_to_pantallaMenuInferior2"
+            app:destination="@id/pantallaMenuInferior" />
     </fragment>
 </navigation>

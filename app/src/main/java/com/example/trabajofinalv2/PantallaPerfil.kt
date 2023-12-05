@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.view.Gravity
+import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import android.widget.Button
 import android.widget.ImageButton
@@ -40,7 +41,19 @@ class PantallaPerfil : Fragment() {
         val popup = PopupMenu(context, view)
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.menu_desplegable, popup.menu)
-        popup.setOnMenuItemClickListener { menuItem ->
+        popup.setOnMenuItemClickListener{ item: MenuItem? ->
+
+            when (item!!.itemId) {
+                R.id.añadirreceta -> {
+                    //perfil a añadir receta
+                }
+                R.id.recetaguradada -> {
+                    //perfil a receta guardada
+                }
+                R.id.editarperfil -> {
+                    findNavController().navigate(R.id.action_pantallaMenuInferior_to_pantallaEditarPefil)
+                }
+            }
 
             true
         }
