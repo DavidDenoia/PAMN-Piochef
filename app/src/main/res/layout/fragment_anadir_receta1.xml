@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp">
+
+    <View
+        android:id="@+id/cabecera"
+        android:layout_width="match_parent"
+        android:background="@drawable/cabecera"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="60dp" />
+
+    <LinearLayout
+        android:id="@+id/indicatorLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/cabecera"
+        android:layout_marginTop="8dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_dot_selected"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_dot_unselected"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/ic_dot_unselected"/>
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/recipeNameInput"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/indicatorLayout"
+        android:hint="Nombre de receta"
+        android:layout_marginTop="16dp"
+        android:inputType="text"
+        />
+
+    <!-- Espacio para la imagen -->
+    <ImageView
+        android:id="@+id/recipeImage"
+        android:layout_width="315dp"
+        android:layout_height="165dp"
+        android:src="@drawable/photo_and_video_1"
+        android:scaleType="center"
+        android:layout_below="@id/recipeNameInput"
+        android:layout_centerInParent="true"
+        android:background="@color/grey" />
+
+    <TextView
+        android:id="@+id/recipeDescriptionTitle"
+        android:layout_width="118dp"
+        android:layout_height="24dp"
+        android:layout_below="@id/recipeImage"
+        android:layout_centerInParent="true"
+        android:text="Descripción"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/custom_color_primary"
+        android:textStyle="bold" />
+
+
+    <!-- Descripción de la receta -->
+    <TextView
+        android:id="@+id/recipeDescription"
+        android:layout_width="315dp"
+        android:layout_height="108dp"
+        android:layout_below="@id/recipeDescriptionTitle"
+        android:layout_centerInParent="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <!-- Pasos de elaboración -->
+    <TextView
+        android:id="@+id/recipeStepsTitle"
+        android:layout_width="118dp"
+        android:layout_height="24dp"
+        android:layout_below="@id/recipeDescription"
+        android:text="Elaboración"
+        android:textColor="@color/custom_color_primary"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_centerInParent="true"/>
+
+
+    <LinearLayout
+        android:id="@+id/stepsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/recipeStepsTitle">
+    <!-- Primer EditText para los pasos -->
+    <EditText
+        android:id="@+id/step1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipeStepsTitle"
+        android:hint="1. "
+        android:inputType="text" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/addStepButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stepsLayout"
+        android:src="@drawable/ic_add"
+        android:background="?android:selectableItemBackground"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- Botón de acción o navegación -->
+    <!-- Botón para ir a la siguiente página -->
+    <ImageButton
+        android:id="@+id/nextPageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_next"
+        android:background="?android:selectableItemBackground"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/addStepButton"
+        android:layout_marginTop="16dp" />
+
+
+</RelativeLayout>
