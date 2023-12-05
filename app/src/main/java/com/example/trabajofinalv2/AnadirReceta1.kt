@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.content.Intent
+import androidx.navigation.fragment.findNavController
 
 
 class AnadirReceta1 : Fragment() {
@@ -47,18 +48,7 @@ class AnadirReceta1 : Fragment() {
         }
 
         nextPageButton.setOnClickListener {
-            // Crear una instancia del nuevo fragmento
-            val newFragment = AnadirReceta2()
-
-            // Obtener el FragmentManager y empezar una transacción
-            val transaction = fragmentManager?.beginTransaction()
-
-            // Reemplazar el fragmento actual por el nuevo
-            transaction?.replace(R.id.fragmentContainer, newFragment) // Reemplaza 'R.id.container' con el ID del contenedor de tu fragmento en el layout
-            transaction?.addToBackStack(null) // Opcional, si deseas agregarlo al back stack
-
-            // Completar la transacción
-            transaction?.commit()
+            findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2)
         }
     }
 

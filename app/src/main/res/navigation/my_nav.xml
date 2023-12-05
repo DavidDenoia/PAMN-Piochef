@@ -105,6 +105,9 @@
         <action
             android:id="@+id/action_pantallaMenuInferior_to_pantallaEditarPefil"
             app:destination="@id/pantallaEditarPefil" />
+        <action
+            android:id="@+id/action_pantallaMenuInferior_to_pantallaAnadirReceta"
+            app:destination="@id/pantallaAnadirReceta" />
     </fragment>
     <fragment android:id="@+id/pantallaEditarPefil"
         android:name="com.example.trabajofinalv2.EditarPerfil"
@@ -115,6 +118,39 @@
             app:destination="@id/pantallaMenuInferior" />
         <action
             android:id="@+id/action_pantallaEditarPefil_to_pantallaMenuInferior2"
+            app:destination="@id/pantallaMenuInferior" />
+    </fragment>
+    <fragment android:id="@+id/pantallaAnadirReceta"
+        android:name="com.example.trabajofinalv2.AnadirReceta1"
+        android:label="fragment_anadir_receta"
+        tools:layout="@layout/fragment_anadir_receta1" >
+        <action
+            android:id="@+id/action_pantallaAnadirReceta_to_pantallaMenuInferior"
+            app:destination="@id/pantallaMenuInferior" />
+        <action
+            android:id="@+id/action_pantallaAnadirReceta_to_pantallaAnadirReceta2"
+            app:destination="@id/pantallaAnadirReceta2" />
+    </fragment>
+    <fragment android:id="@+id/pantallaAnadirReceta2"
+        android:name="com.example.trabajofinalv2.AnadirReceta2"
+        android:label="fragment_anadirreceta2"
+        tools:layout="@layout/fragment_anadir_receta_2" >
+        <action
+            android:id="@+id/action_pantallaAnadirReceta2_to_pantallaAnadirReceta"
+            app:destination="@id/pantallaAnadirReceta" />
+        <action
+            android:id="@+id/action_pantallaAnadirReceta2_to_pantallaAnadirReceta3"
+            app:destination="@id/pantallaAnadirReceta3" />
+    </fragment>
+    <fragment android:id="@+id/pantallaAnadirReceta3"
+        android:name="com.example.trabajofinalv2.AnadirReceta3"
+        android:label="fragment_anadir_receta3"
+        tools:layout="@layout/fragment_anadir_receta_3" >
+        <action
+            android:id="@+id/action_pantallaAnadirReceta3_to_pantallaAnadirReceta2"
+            app:destination="@id/pantallaAnadirReceta2" />
+        <action
+            android:id="@+id/action_pantallaAnadirReceta3_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>
 </navigation>

@@ -1,15 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragmentContainer"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnadirReceta2">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:fillViewport="true">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:padding="0dp">
 
-</FrameLayout>
+        <View
+            android:id="@+id/cabecera"
+            android:layout_width="match_parent"
+            android:background="@drawable/cabecera"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_height="60dp" />
+
+        <LinearLayout
+            android:id="@+id/indicatorLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/cabecera"
+            android:layout_marginTop="8dp"
+            android:layout_centerInParent="true">
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/ic_dot_unselected"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/ic_dot_selected"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/ic_dot_unselected"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/labtiemprep"
+            android:layout_width="220dp"
+            android:layout_height="24dp"
+            android:layout_below="@id/indicatorLayout"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text ="Tiempo de preparación"
+            android:textColor="@color/custom_color_primary"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/tiempoInput"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/labtiemprep"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@id/indicatorLayout"
+            android:hint="1h"
+            android:textColor="@color/custom_color_primary"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/labraciones"
+            android:layout_width="220dp"
+            android:layout_height="24dp"
+            android:layout_below="@id/labtiemprep"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text ="Numero de raciones"
+            android:textColor="@color/custom_color_primary"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/racionesInput"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/labraciones"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@id/labtiemprep"
+            android:hint="1"
+            android:textColor="@color/custom_color_primary"
+            android:inputType="text"/>
+        <!-- Espacio para la imagen -->
+
+
+        <!-- Descripción de la receta -->
+
+        <!-- Pasos de elaboración -->
+        <TextView
+            android:id="@+id/recipeStepsTitle"
+            android:layout_width="118dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/labraciones"
+            android:layout_centerInParent="true"
+            android:text="Ingredientes"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/custom_color_primary"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:id="@+id/colstepsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/recipeStepsTitle">
+            <!-- Primer EditText para los pasos -->
+            <LinearLayout
+                android:id="@+id/stepsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/recipeStepsTitle">
+                <EditText
+                    android:id="@+id/nomIngred"
+                    android:layout_width="180dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Nombre "
+                    android:inputType="text" />
+                <EditText
+                    android:id="@+id/cantidad"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Cantidad "
+                    android:inputType="text" />
+                <EditText
+                    android:id="@+id/medida"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="ml"
+                    android:inputType="text" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/addStepButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/colstepsLayout"
+            android:src="@drawable/ic_add"
+            android:background="?android:selectableItemBackground"
+            android:layout_centerHorizontal="true"/>
+
+        <!-- Botón de acción o navegación -->
+        <!-- Botón para ir a la siguiente página -->
+        <ImageButton
+            android:id="@+id/nextPageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            android:background="?android:selectableItemBackground"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/addStepButton"
+            android:layout_marginTop="16dp" />
+
+    </RelativeLayout>
+</ScrollView>

@@ -46,6 +46,7 @@ class PantallaPerfil : Fragment() {
             when (item!!.itemId) {
                 R.id.añadirreceta -> {
                     //perfil a añadir receta
+                    findNavController().navigate(R.id.action_pantallaMenuInferior_to_pantallaAnadirReceta)
                 }
                 R.id.recetaguradada -> {
                     //perfil a receta guardada
