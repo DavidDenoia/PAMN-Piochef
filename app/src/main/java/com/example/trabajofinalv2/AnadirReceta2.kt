@@ -32,6 +32,9 @@ class AnadirReceta2 : Fragment() {
 
     private val editTextsList = mutableListOf<EditText>()
 
+    private lateinit var nrac: String
+    private lateinit var tprep: String
+    private var ingList = ArrayList<String>()
     private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -150,6 +153,20 @@ class AnadirReceta2 : Fragment() {
 
         auth = Firebase.auth
         nextPageButton.setOnClickListener {
+
+            tprep = view.findViewById<EditText>(R.id.tiempoInput).text.toString()
+            nrac = view.findViewById<EditText>(R.id.racionesInput).text.toString()
+            ingList = ArrayList<String>()
+            /*for(i in 0 until stepsLayout.childCount){
+                val step = stepsLayout.getChildAt(i) as LinearLayout
+                for (j in 0 until step.childCount){
+                    val noming = step.getChildAt(j) as EditText
+                    val caning = step.getChildAt(j+1) as EditText
+                    //val mling = step.getChildAt(j+2) as EditText
+                    //ingList.add(noming.text.toString() + " , " + caning.text.toString() + " , " + mling.text.toString())
+                    Log.i(tag,caning.text.toString())
+                }
+            }*/
             //pag3
             registraValores(observedRecipeName,observedImageUris,observedRecipeDescription,observedSteps)
 
@@ -170,11 +187,16 @@ class AnadirReceta2 : Fragment() {
         if(user != null){
             val uid = user.uid
             Log.d("Firebase", "Usuario autenticado con UID: ${user.uid}")
+            val databaseUserRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("users")
             val recipeData = hashMapOf(
                 "recipeName" to recipeName,
                 "imageUris" to imageUris,
                 "recipeDescription" to recipeDescription,
-                "steps" to steps
+                "steps" to steps,
+                "preparationTime" to tprep,
+                "numRations" to nrac,
+                "ingredients" to ingList,
+                "user" to user.email
             )
 
             val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
