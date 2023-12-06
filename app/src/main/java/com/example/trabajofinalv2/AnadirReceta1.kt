@@ -15,13 +15,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
 import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.ViewModelProvider
 
 class AnadirReceta1 : Fragment() {
 
+
+
+
     private var stepCount = 1
+    private var imageUris = mutableListOf<String>()
 
     val pickMedia = registerForActivityResult(PickMultipleVisualMedia(3)) { uris ->
         if(uris.isNotEmpty()){
+            imageUris.clear()
+
+            uris.forEach{ uri ->
+                imageUris.add(uri.toString())
+            }
             val layoutIamgenes = view?.findViewById<LinearLayout>(R.id.layoutImagenes)
             layoutIamgenes?.removeAllViews()
             btnImage.setImageURI(uris.get(0))
@@ -50,6 +60,9 @@ class AnadirReceta1 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+
         val nextPageButton = view.findViewById<ImageButton>(R.id.nextPageButton)
         val stepsLayout = view.findViewById<LinearLayout>(R.id.stepsLayout)
         btnImage = view.findViewById(R.id.recipeImage)
@@ -74,6 +87,32 @@ class AnadirReceta1 : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
         }
         nextPageButton.setOnClickListener {
+
+
+
+
+            val recipeName = view.findViewById<EditText>(R.id.recipeNameInput).text.toString()
+
+
+            val imageUriStrings = imageUris.map { it.toString() }
+
+            val recipeDescription = view.findViewById<EditText>(R.id.recipeDescription).text.toString()
+
+
+            val stepsList = ArrayList<String>()
+            for(i in 0 until stepsLayout.childCount){
+                val step = stepsLayout.getChildAt(i) as EditText
+                stepsList.add(step.text.toString())
+            }
+
+            // Guardar los datos en el ViewModel
+            sharedViewModel.recipeName.value = recipeName
+            sharedViewModel.imageUris.value = imageUris
+            sharedViewModel.recipeDescription.value = recipeDescription
+            sharedViewModel.steps.value = stepsList
+
+
+
             findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2)
         }
     }

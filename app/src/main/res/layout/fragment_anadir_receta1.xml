@@ -45,16 +45,15 @@
     </LinearLayout>
 
 
-    <EditText
-        android:id="@+id/recipeNameInput"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/indicatorLayout"
-        android:hint="Nombre de receta"
-        android:layout_marginTop="16dp"
-        android:inputType="text"
-        />
+        <EditText
+            android:id="@+id/recipeNameInput"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/indicatorLayout"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:hint="Nombre de receta"
+            android:inputType="text" />
 
     <!-- Espacio para la imagen -->
         <ScrollView
@@ -98,13 +97,15 @@
 
 
     <!-- Descripción de la receta -->
-    <TextView
-        android:id="@+id/recipeDescription"
-        android:layout_width="315dp"
-        android:layout_height="108dp"
-        android:layout_below="@id/recipeDescriptionTitle"
-        android:layout_centerInParent="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <EditText
+            android:id="@+id/recipeDescription"
+            android:layout_width="315dp"
+            android:layout_height="108dp"
+            android:layout_below="@id/recipeDescriptionTitle"
+            android:layout_centerInParent="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:hint="Descripcion de la receta"
+            android:inputType="text"/>
 
     <!-- Pasos de elaboración -->
     <TextView

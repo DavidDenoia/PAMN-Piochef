@@ -14,12 +14,25 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Vector
+import android.net.Uri
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import com.google.firebase.database.ktx.database
+
 
 class AnadirReceta2 : Fragment() {
+
+
     private var stepCount = 1
     //Crea un firebaseAuth object
-    lateinit var auth: FirebaseAuth
+
     private val editTextsList = mutableListOf<EditText>()
+
+    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,22 +104,112 @@ class AnadirReceta2 : Fragment() {
             stepsLayout.addView(layout)
         }
 
+
+
+
+        // Inicializar el ViewModel
+        val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+
+        var observedRecipeName = ""
+        var observedImageUris = listOf<String>()
+        var observedRecipeDescription = ""
+        var observedSteps = listOf<String>()
+
+        // Observar los datos y actuar en consecuencia
+        sharedViewModel.recipeName.observe(viewLifecycleOwner, Observer { recipeName ->
+            // Haz algo con recipeName, por ejemplo, mostrarlo en un TextView
+            observedRecipeName = recipeName
+            Log.d("SharedViewModel", "Recipe Name: $observedRecipeName")
+        })
+
+        sharedViewModel.imageUris.observe(viewLifecycleOwner, Observer { uris ->
+            // Manejar la lista de URIs
+            observedImageUris = uris
+            Log.d("SharedViewModel", "Image URIs: $observedImageUris")
+        })
+
+        sharedViewModel.recipeDescription.observe(viewLifecycleOwner, Observer { description ->
+            // Manejar la descripción
+            observedRecipeDescription = description
+            Log.d("SharedViewModel", "Recipe Description: $observedRecipeDescription")
+        })
+
+        sharedViewModel.steps.observe(viewLifecycleOwner, Observer { steps ->
+            // Manejar los pasos
+            observedSteps = steps
+            Log.d("SharedViewModel", "Steps: $observedSteps")
+        })
+
+
+
+
+
+
+
+
+
+        auth = Firebase.auth
         nextPageButton.setOnClickListener {
             //pag3
-            registraValores()
+            registraValores(observedRecipeName,observedImageUris,observedRecipeDescription,observedSteps)
+
+        }
+
+
+
+        //Aqui recogemos los datos que vienen de añadirReceta1
+
+
+
+    }
+    private fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>){
+        // Obtener la instancia de FirebaseAuth
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
+        if(user != null){
+            val uid = user.uid
+            Log.d("Firebase", "Usuario autenticado con UID: ${user.uid}")
+            val recipeData = hashMapOf(
+                "recipeName" to recipeName,
+                "imageUris" to imageUris,
+                "recipeDescription" to recipeDescription,
+                "steps" to steps
+            )
+
+            val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
+            //val databaseRef = FirebaseDatabase.getInstance().getReference("users/$uid/recipes")
+
+            val recipeId = databaseRef.push().key
+
+            recipeId?.let {
+                // Guardar los datos en la base de datos
+                databaseRef.child(it).setValue(recipeData)
+                    .addOnSuccessListener {
+                        Log.d("Firebase", "Datos guardados correctamente")
+                        // Manejar éxito, por ejemplo, navegando a otro fragmento
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Firebase", "Error al guardar datos", e)
+                        // Manejar fallo
+                    }
+            }
+            findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
+        } else {
+            Log.e("Firebase", "Usuario no autenticado")
+            // Manejar caso de usuario no autenticado
         }
     }
-    fun registraValores(){
-        //se autentifica
-        auth = FirebaseAuth.getInstance()
-        //funcion pilla todos los datos
-        val datosinicial = recogeDatos()
-        val ingredientes = obtenerTextosDePasos()
-        //los mete en database
 
-        //una vez metidos navega al siguiente
-        findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
-    }
+
+
+
+
+
+
+
+
+
 
     fun recogeDatos(): List<String>{
         var datos = Vector<String>();
