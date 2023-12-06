@@ -17,32 +17,33 @@
         android:layout_alignParentEnd="true"
         android:layout_height="60dp" />
 
-    <LinearLayout
-        android:id="@+id/indicatorLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/cabecera"
-        android:layout_marginTop="8dp"
-        android:layout_centerInParent="true">
+        <LinearLayout
+            android:id="@+id/indicatorLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cabecera"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="30dp"
-            android:src="@drawable/ic_dot_selected"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/ic_dot_selected" />
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="30dp"
-            android:src="@drawable/ic_dot_unselected"/>
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="0dp"
-            android:src="@drawable/ic_dot_unselected"/>
-    </LinearLayout>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="30dp"
+                android:src="@drawable/ic_dot_unselected" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/ic_dot_unselected" />
+        </LinearLayout>
 
 
         <EditText

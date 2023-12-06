@@ -21,12 +21,15 @@ import com.google.firebase.ktx.Firebase
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.ktx.database
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+
 class AnadirReceta2 : Fragment() {
 
 
@@ -37,7 +40,7 @@ class AnadirReceta2 : Fragment() {
 
     private lateinit var nrac: String
     private lateinit var tprep: String
-    private var ingList = ArrayList<String>()
+    private var ingList = ArrayList<ArrayList<String>>()
     private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -159,20 +162,23 @@ class AnadirReceta2 : Fragment() {
 
             tprep = view.findViewById<EditText>(R.id.tiempoInput).text.toString()
             nrac = view.findViewById<EditText>(R.id.racionesInput).text.toString()
-            ingList = ArrayList<String>()
-            /*for(i in 0 until stepsLayout.childCount){
+            ingList = ArrayList<ArrayList<String>>()
+            var ingn = ArrayList<String>()
+            for(i in 0 until stepsLayout.childCount){
                 val step = stepsLayout.getChildAt(i) as LinearLayout
-                for (j in 0 until step.childCount){
-                    val noming = step.getChildAt(j) as EditText
-                    val caning = step.getChildAt(j+1) as EditText
-                    //val mling = step.getChildAt(j+2) as EditText
-                    //ingList.add(noming.text.toString() + " , " + caning.text.toString() + " , " + mling.text.toString())
-                    Log.i(tag,caning.text.toString())
-                }
-            }*/
+                val noming = step.getChildAt(0) as? EditText
+                val caning = step.getChildAt(1) as? EditText
+                val mling = step.getChildAt(2) as? EditText
+                ingn.add(noming?.text.toString())
+                ingn.add(caning?.text.toString())
+                ingn.add(mling?.text.toString())
+                ingList.add(ingn)
+                Log.i(tag,caning?.text.toString())
+            }
             //pag3
-            registraValores(observedRecipeName,observedImageUris,observedRecipeDescription,observedSteps)
-
+            lifecycleScope.launch{
+                registraValores(observedRecipeName,observedImageUris,observedRecipeDescription,observedSteps)
+            }
         }
 
 
@@ -182,18 +188,18 @@ class AnadirReceta2 : Fragment() {
 
 
     }
-    private fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>){
+    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>){
         // Obtener la instancia de FirebaseAuth
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
-
+        val urls = uploadImagesAndGetURLs(imageUris)
         if(user != null){
             val uid = user.uid
             Log.d("Firebase", "Usuario autenticado con UID: ${user.uid}")
             val databaseUserRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("users")
             val recipeData = hashMapOf(
                 "recipeName" to recipeName,
-                "imageUris" to imageUris,
+                "imageUrls" to urls,
                 "recipeDescription" to recipeDescription,
                 "steps" to steps,
                 "preparationTime" to tprep,
@@ -227,7 +233,7 @@ class AnadirReceta2 : Fragment() {
     }
 
 
-    suspend fun uploadImagesAndGetURLs(imagePaths: ArrayList<String>): List<String> = coroutineScope {
+    suspend fun uploadImagesAndGetURLs(imagePaths: List<String>): List<String> = coroutineScope {
         val storage = FirebaseStorage.getInstance()
         val urls = imagePaths.map { imagePath ->
             async {
