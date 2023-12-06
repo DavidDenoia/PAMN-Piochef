@@ -18,12 +18,15 @@ import android.net.Uri
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import com.google.firebase.database.ktx.database
-
-
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitAll
 class AnadirReceta2 : Fragment() {
 
 
@@ -202,7 +205,19 @@ class AnadirReceta2 : Fragment() {
     }
 
 
+    suspend fun uploadImagesAndGetURLs(imagePaths: ArrayList<String>): List<String> = coroutineScope {
+        val storage = FirebaseStorage.getInstance()
+        val urls = imagePaths.map { imagePath ->
+            async {
+                val storageRef = storage.reference.child("imagenesRecetas/${imagePath.substringAfterLast("/")}")
+                val uploadTask = storageRef.putFile(Uri.parse(imagePath))
+                val downloadUrl = uploadTask.await().storage.downloadUrl.await().toString()
+                downloadUrl
+            }
+        }.awaitAll()
 
+        urls
+    }
 
 
 
