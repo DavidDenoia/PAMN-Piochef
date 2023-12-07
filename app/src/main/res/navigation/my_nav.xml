@@ -92,6 +92,9 @@
         <action
             android:id="@+id/action_pantallaprincipal_to_pantallaperfil"
             app:destination="@id/pantallaperfil" />
+        <action
+            android:id="@+id/action_pantallaprincipal_to_verRecetas"
+            app:destination="@id/verRecetas" />
     </fragment>
     <fragment android:id="@+id/pantallaperfil"
         android:name="com.example.trabajofinalv2.PantallaPerfil"
@@ -153,4 +156,12 @@
             android:id="@+id/action_pantallaAnadirReceta3_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>
+    <fragment
+        android:id="@+id/verRecetas"
+        android:name="com.example.trabajofinalv2.VerRecetas"
+        android:label="fragment_ver_recetas"
+        tools:layout="@layout/fragment_ver_recetas">
+    </fragment>
+
+
 </navigation>
