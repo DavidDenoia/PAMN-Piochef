@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -55,12 +56,10 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
 
         adapter = MainAdapter(requireContext(), object : MainAdapter.OnRecipeClickListener{
             override fun onRecipeClick(recipeName: String, user: String) {
-                Log.e("RecipeClick", "Nombre de la receta: $recipeName, Usuario: $user")
-                /*val bundle = Bundle().apply {
-                    putString("recipeName", recipeName)
-                    putString("user", user)
-                }
-                findNavController().navigate(R.id.action_pantallaprincipal_to_verRecetas, bundle)*/
+                //Log.e("RecipeClick", "Nombre de la receta: $recipeName, Usuario: $user")
+                val bundle = bundleOf("recipeName" to recipeName,
+                    "user" to user)
+                findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
             }
         })
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recetasRecyclerView)

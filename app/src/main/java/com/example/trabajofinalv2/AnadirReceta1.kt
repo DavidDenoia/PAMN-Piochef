@@ -10,10 +10,12 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.content.Intent
 import android.util.Log
+import android.window.BackEvent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.ViewModelProvider
 
