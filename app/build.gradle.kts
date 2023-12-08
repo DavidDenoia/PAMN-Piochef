@@ -84,4 +84,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation( "androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.google.android.material:material:1.10.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }

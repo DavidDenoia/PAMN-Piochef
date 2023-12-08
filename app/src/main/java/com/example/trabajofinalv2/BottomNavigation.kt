@@ -30,19 +30,6 @@ class BottomNavigation : Fragment(R.layout.fragment_menu_inferior) {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             handleBottonNavigation(item)
             false
-//            when (item.itemId) {
-//                R.id.nav_cuenta -> {
-//                    setCurrentFragment(perfilFragment)
-//                    true
-//                }
-//
-//                R.id.nav_inicio -> {
-//                    setCurrentFragment(inicioFragment)
-//                    true
-//                }
-//
-//                else -> false
-//            }
         }
         return view
     }

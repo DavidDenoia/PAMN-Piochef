@@ -16,11 +16,17 @@ import androidx.viewpager2.widget.ViewPager2
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 
 
 class PantallaPerfil : Fragment() {
 
-
+    lateinit var fotoPerfil: ImageView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +39,14 @@ class PantallaPerfil : Fragment() {
             showPopupMenu(v)
         }
 
+        //Establecer foto de perfil
+        fotoPerfil = view.findViewById(R.id.image)
+        val imageUrl: String? = obtenerUrlDeLaImagenDelUsuario(fotoPerfil)
+        if (imageUrl != null) {
+            Picasso.get().load(imageUrl).into(fotoPerfil)
+        } else {
+            fotoPerfil.setImageResource(R.drawable.placeholder_image)
+        }
 
         return view
     }
@@ -60,8 +74,43 @@ class PantallaPerfil : Fragment() {
         }
         popup.show()
     }
+}
 
+private fun obtenerUrlDeLaImagenDelUsuario(imageView: ImageView): String? {
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
+    if (userId != null) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
 
+        // Agrega un listener para obtener los datos del usuario desde la Realtime Database
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Comprueba si el usuario tiene una URL de imagen en la base de datos
+                if (snapshot.hasChild("profileImageUrl")) {
+                    // Obtiene la URL de la imagen del usuario
+                    val imageUrl = snapshot.child("profileImageUrl").getValue(String::class.java)
 
+                    // Utiliza la URL de la imagen para cargarla en el ImageView
+                    if (imageUrl != null) {
+                        Picasso.get().load(imageUrl).into(imageView)
+                    } else {
+                        // Si no hay URL, puedes mostrar una imagen de marcador de posición o dejar el ImageView vacío
+                        // Por ejemplo, mostraremos una imagen de marcador de posición
+                        imageView.setImageResource(R.drawable.placeholder_image)
+                    }
+                } else {
+                    // Si no hay una URL de imagen en la base de datos, puedes manejarlo de acuerdo a tus necesidades
+                    // Por ejemplo, mostrar una imagen de marcador de posición
+                    imageView.setImageResource(R.drawable.placeholder_image)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Maneja cualquier error que pueda ocurrir al obtener datos de la base de datos
+                // Puedes agregar tu lógica de manejo de errores aquí
+            }
+        })
+    }
+
+    return null
 }
