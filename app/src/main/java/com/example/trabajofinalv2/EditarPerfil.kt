@@ -33,6 +33,7 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
     lateinit var guardarCambiosButton: Button
     lateinit var cambiarNombreUsuario: EditText
     lateinit var cambiarDescripcion: EditText
+    lateinit var cambiarContra: Button
 
     // Código de solicitud para la selección de imágenes
     private val PICK_IMAGE_REQUEST = 1
@@ -52,6 +53,7 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
         guardarCambiosButton = view.findViewById(R.id.Guardar_cambios)
         cambiarNombreUsuario = view.findViewById(R.id.editTextUserName)
         cambiarDescripcion = view.findViewById(R.id.editTextDescription)
+        cambiarContra = view.findViewById(R.id.buttonChangePassword)
 
         // Obtiene la URL de la imagen del usuario (reemplaza con tu lógica para obtener la URL)
         val imageUrl: String? = obtenerUrlDeLaImagenDelUsuario(imageView)
@@ -98,8 +100,10 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
             if(nuevaDescripcion != ""){
                 cambiarDescripcion(nuevaDescripcion, requireContext())
             }
-
-
+        }
+        //Cambiar contraseña
+        cambiarContra.setOnClickListener {
+            findNavController().navigate(R.id.action_pantallaEditarPefil_to_cambiarContraseña)
         }
     }
     // En el método onActivityResult
