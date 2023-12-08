@@ -1,14 +1,17 @@
 package com.example.trabajofinalv2
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -28,6 +31,8 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
     lateinit var imageView: ImageView
     lateinit var buttonEditProfile: Button
     lateinit var guardarCambiosButton: Button
+    lateinit var cambiarNombreUsuario: EditText
+    lateinit var cambiarDescripcion: EditText
 
     // Código de solicitud para la selección de imágenes
     private val PICK_IMAGE_REQUEST = 1
@@ -45,6 +50,8 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
         imageView = view.findViewById(R.id.profile_image)
         buttonEditProfile = view.findViewById(R.id.buttonEditProfile)
         guardarCambiosButton = view.findViewById(R.id.Guardar_cambios)
+        cambiarNombreUsuario = view.findViewById(R.id.editTextUserName)
+        cambiarDescripcion = view.findViewById(R.id.editTextDescription)
 
         // Obtiene la URL de la imagen del usuario (reemplaza con tu lógica para obtener la URL)
         val imageUrl: String? = obtenerUrlDeLaImagenDelUsuario(imageView)
@@ -79,46 +86,13 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
         }
 
         guardarCambiosButton.setOnClickListener {
-            // Verifica si hay una imagen seleccionada
-            if (imageUri != null) {
-                // Guarda la información en Firebase
-                Picasso.get().load(imageUrl).into(imageView)
-                val userId = FirebaseAuth.getInstance().currentUser?.uid
-                if (userId != null) {
-                    Picasso.get().load(imageUrl).into(imageView)
-                    val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
-                    val storageReference = FirebaseStorage.getInstance().reference.child("users").child(userId).child("profileImage.jpg")
+            guardarImagen(imageUri, imageUrl, imageView, requireContext())
+            //Editar el nombre de usuario
+            val nuevoNombre = cambiarNombreUsuario.text.toString()
+            cambiarNombreUsuario(nuevoNombre, requireContext())
 
-                    // Subir la imagen
-                    storageReference.putFile(imageUri!!)
-                        .addOnSuccessListener { taskSnapshot ->
-                            // Obtener la URL de descarga
-                            storageReference.downloadUrl.addOnSuccessListener { uri ->
-                                val imageUrl = uri.toString()
-
-                                // Crea un objeto para las actualizaciones
-                                val updates = hashMapOf<String, Any>(
-                                    "profileImageUrl" to imageUrl,
-                                    // Otros campos que desees actualizar
-                                )
-
-                                // Actualiza los datos en la Realtime Database
-                                databaseReference.updateChildren(updates)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(requireContext(), "Cambios guardados exitosamente", Toast.LENGTH_SHORT).show()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Toast.makeText(requireContext(), "Error al guardar cambios: ${e.message}", Toast.LENGTH_SHORT).show()
-                                    }
-                            }
-                        }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(requireContext(), "Error al subir la imagen: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
-                }
-            } else {
-                Toast.makeText(requireContext(), "Selecciona una imagen antes de guardar cambios", Toast.LENGTH_SHORT).show()
-            }
+            val nuevaDescripcion = cambiarDescripcion.text.toString()
+            cambiarDescripcion(nuevaDescripcion, requireContext())
         }
     }
     // En el método onActivityResult
@@ -173,4 +147,80 @@ private fun obtenerUrlDeLaImagenDelUsuario(imageView: ImageView): String? {
     }
 
     return null
+}
+
+fun guardarImagen(imageUri: Uri?, imageUrl:String?, imageView: ImageView, context: Context) {
+    // Verifica si hay una imagen seleccionada
+    if (imageUri != null) {
+        // Guarda la información en Firebase
+        Picasso.get().load(imageUrl).into(imageView)
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            Picasso.get().load(imageUrl).into(imageView)
+            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+            val storageReference = FirebaseStorage.getInstance().reference.child("users").child(userId).child("profileImage.jpg")
+
+            // Subir la imagen
+            storageReference.putFile(imageUri!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    // Obtener la URL de descarga
+                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                        val imageUrl = uri.toString()
+
+                        val updates = hashMapOf<String, Any>(
+                            "profileImageUrl" to imageUrl
+                        )
+
+                        databaseReference.updateChildren(updates)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Cambios guardados exitosamente", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error al guardar cambios: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(context, "Error al subir la imagen: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+}
+
+fun cambiarNombreUsuario(nuevoNombre: String, context: Context) {
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    if (userId != null) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+
+        val updates = hashMapOf<String, Any>(
+            "username" to nuevoNombre
+        )
+
+        databaseReference.updateChildren(updates)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Nombre de usuario actualizado exitosamente", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error al actualizar el nombre de usuario: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+}
+
+fun cambiarDescripcion(nuevaDescripcion: String, context: Context) {
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    if (userId != null) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+
+        val updates = hashMapOf<String, Any>(
+            "description" to nuevaDescripcion
+        )
+
+        databaseReference.updateChildren(updates)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Descripcion Actualizada", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 }
