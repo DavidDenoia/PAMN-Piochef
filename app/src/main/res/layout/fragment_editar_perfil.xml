@@ -41,24 +41,18 @@
         app:layout_constraintTop_toBottomOf="@+id/titulo_editar_perfil"
         tools:layout_editor_absoluteX="0dp" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         app:cardCornerRadius="250dp"
+        android:background="@drawable/placeholder_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linea_titulo">
-
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/image_9"
-            app:layout_constraintTop_toTopOf="@+id/linea_titulo" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="@+id/linea_titulo"
+        />
 
     <Button
         android:id="@+id/buttonEditProfile"
@@ -71,7 +65,7 @@
         android:text="@string/editar_foto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
     <TextView
         android:id="@+id/visibilidad"

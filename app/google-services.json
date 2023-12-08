@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "825781453454",
     "project_id": "piochef-effb5",
+    "firebase_url": "https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app",
     "storage_bucket": "piochef-effb5.appspot.com"
   },
   "client": [
