@@ -118,7 +118,7 @@
     <TextView
         android:text="Nombre de usuario"
         android:id="@+id/username"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginTop="20dp"
         android:textColor="#000000"
@@ -126,15 +126,14 @@
         app:layout_constraintTop_toBottomOf="@+id/image"
         app:layout_constraintLeft_toLeftOf="@+id/image"
         />
+
     <TextView
-        android:text="Descripcion"
         android:id="@+id/descp"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@+id/username"
         app:layout_constraintLeft_toLeftOf="@+id/username"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/username" />
     <TextView
         android:text="Mis recetas"
         android:id="@+id/titlerecetas"

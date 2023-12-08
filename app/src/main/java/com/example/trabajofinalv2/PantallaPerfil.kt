@@ -1,5 +1,6 @@
 package com.example.trabajofinalv2
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -27,17 +29,26 @@ import com.squareup.picasso.Picasso
 class PantallaPerfil : Fragment() {
 
     lateinit var fotoPerfil: ImageView
+    lateinit var usernameText: TextView
+    lateinit var userDescription: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_pantalla_perfil, container, false)
 
         val menuButton = view.findViewById<ImageView>(R.id.menuButton)
         menuButton.setOnClickListener { v ->
             showPopupMenu(v)
         }
+
+        //Establecer nombre de usuario
+        usernameText = view.findViewById(R.id.username)
+        obtenerUsername(usernameText)
+
+        //Establecer descripcion
+        userDescription = view.findViewById(R.id.descp)
+        obtenerDescription(userDescription)
 
         //Establecer foto de perfil
         fotoPerfil = view.findViewById(R.id.image)
@@ -69,7 +80,6 @@ class PantallaPerfil : Fragment() {
                     findNavController().navigate(R.id.action_pantallaMenuInferior_to_pantallaEditarPefil)
                 }
             }
-
             true
         }
         popup.show()
@@ -78,39 +88,60 @@ class PantallaPerfil : Fragment() {
 
 private fun obtenerUrlDeLaImagenDelUsuario(imageView: ImageView): String? {
     val userId = FirebaseAuth.getInstance().currentUser?.uid
-
     if (userId != null) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
-
-        // Agrega un listener para obtener los datos del usuario desde la Realtime Database
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 // Comprueba si el usuario tiene una URL de imagen en la base de datos
                 if (snapshot.hasChild("profileImageUrl")) {
-                    // Obtiene la URL de la imagen del usuario
                     val imageUrl = snapshot.child("profileImageUrl").getValue(String::class.java)
-
-                    // Utiliza la URL de la imagen para cargarla en el ImageView
                     if (imageUrl != null) {
                         Picasso.get().load(imageUrl).into(imageView)
                     } else {
-                        // Si no hay URL, puedes mostrar una imagen de marcador de posición o dejar el ImageView vacío
-                        // Por ejemplo, mostraremos una imagen de marcador de posición
                         imageView.setImageResource(R.drawable.placeholder_image)
                     }
                 } else {
-                    // Si no hay una URL de imagen en la base de datos, puedes manejarlo de acuerdo a tus necesidades
-                    // Por ejemplo, mostrar una imagen de marcador de posición
                     imageView.setImageResource(R.drawable.placeholder_image)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
-                // Maneja cualquier error que pueda ocurrir al obtener datos de la base de datos
-                // Puedes agregar tu lógica de manejo de errores aquí
             }
         })
     }
 
     return null
 }
+
+private fun obtenerUsername(usernameText: TextView){
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    if (userId != null) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists() && snapshot.hasChild("username")) {
+                    val username = snapshot.child("username").value.toString()
+                    usernameText.text = "$username"
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }}
+
+private fun obtenerDescription(descriptionText: TextView){
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    if (userId != null) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists() && snapshot.hasChild("description")) {
+                    val descripcion = snapshot.child("description").value.toString()
+                    descriptionText.text = "$descripcion"
+                } else {
+                    descriptionText.text = ""
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }}
