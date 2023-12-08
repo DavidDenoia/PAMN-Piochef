@@ -87,12 +87,19 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
 
         guardarCambiosButton.setOnClickListener {
             guardarImagen(imageUri, imageUrl, imageView, requireContext())
-            //Editar el nombre de usuario
+
             val nuevoNombre = cambiarNombreUsuario.text.toString()
-            cambiarNombreUsuario(nuevoNombre, requireContext())
+            if(nuevoNombre != ""){
+                cambiarNombreUsuario(nuevoNombre, requireContext())
+            }
+
 
             val nuevaDescripcion = cambiarDescripcion.text.toString()
-            cambiarDescripcion(nuevaDescripcion, requireContext())
+            if(nuevaDescripcion != ""){
+                cambiarDescripcion(nuevaDescripcion, requireContext())
+            }
+
+
         }
     }
     // En el método onActivityResult

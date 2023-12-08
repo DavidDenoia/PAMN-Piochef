@@ -134,9 +134,11 @@ private fun obtenerDescription(descriptionText: TextView){
         val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists() && snapshot.hasChild("username")) {
+                if (snapshot.exists() && snapshot.hasChild("description")) {
                     val descripcion = snapshot.child("description").value.toString()
                     descriptionText.text = "$descripcion"
+                } else {
+                    descriptionText.text = ""
                 }
             }
             override fun onCancelled(error: DatabaseError) {
