@@ -8,8 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import org.checkerframework.common.subtyping.qual.Bottom
 
 class verRecetas : Fragment() {
@@ -17,6 +20,10 @@ class verRecetas : Fragment() {
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
     private var contenedorIngredientes: FrameLayout? = null
+    private var user: String? = null
+    private lateinit var deleteImageView: ImageView
+    private lateinit var editImageView: ImageView
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,62 +31,10 @@ class verRecetas : Fragment() {
     ): View? {
         val tv = view?.findViewById<TextView>(R.id.nombre)
         tv?.text = arguments?.getString("user")
-        val user = arguments?.getString("user")
+        user = arguments?.getString("user")
         val recipeName = arguments?.getString("recipeName")
         Log.e("RecipeClick", "Pepito: $recipeName, Usuario: $user")
         // Inflate the layout for this fragment
-
-
-
-
-        /*botonPreparacion = view?.findViewById<Button>(R.id.botonPreparacion)
-        botonIngredientes = view?.findViewById<Button>(R.id.botonIngredientes)
-        contenedorPreparacion = view?.findViewById<FrameLayout>(R.id.contenedorPreparacion)
-        contenedorIngredientes = view?.findViewById<FrameLayout>(R.id.contenedorIngredientes)*/
-
-        /*mostrarPreparacion()
-        botonPreparacion?.setOnClickListener {
-            mostrarPreparacion()
-            botonPreparacion?.apply {
-                setBackgroundColor(resources.getColor(R.color.custom_color_primary))
-                setTextColor(resources.getColor(R.color.white))
-            }
-            botonIngredientes?.apply {
-                setBackgroundColor(resources.getColor(R.color.white))
-                setTextColor(resources.getColor(R.color.black))
-            }
-        }
-        botonIngredientes?.setOnClickListener {
-            mostrarIngredientes()
-            botonIngredientes?.apply {
-                setBackgroundColor(resources.getColor(R.color.custom_color_primary))
-                setTextColor(resources.getColor(R.color.white))
-            }
-            botonPreparacion?.apply {
-                setBackgroundColor(resources.getColor(R.color.white))
-                setTextColor(resources.getColor(R.color.black))
-            }
-        }*/
-
-        /*botonPreparacion?.setOnClickListener {
-            mostrarPreparacion()
-            botonPreparacion?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.custom_color_primary))
-            botonPreparacion?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            botonIngredientes?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-            botonIngredientes?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-        }
-
-        botonIngredientes?.setOnClickListener {
-            mostrarIngredientes()
-            botonIngredientes?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.custom_color_primary))
-            botonIngredientes?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            botonPreparacion?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-            botonPreparacion?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-        }
-
-        // Muestra la preparación por defecto
-        mostrarPreparacion()*/
-
 
 
         return inflater.inflate(R.layout.fragment_verrecetas, container, false)
@@ -113,6 +68,11 @@ class verRecetas : Fragment() {
 
         mostrarPreparacion()
 
+
+        deleteImageView = view.findViewById(R.id.deleteImageView)
+        editImageView = view.findViewById(R.id.editImageView)
+        checkUserSession()
+
     }
 
     private fun mostrarPreparacion(){
@@ -128,6 +88,25 @@ class verRecetas : Fragment() {
         contenedorPreparacion?.visibility = View.GONE
         contenedorIngredientes?.visibility = View.VISIBLE
         Log.d("Mostrar ingredientes", "Mostrando los ingredientes de la receta")
+    }
+
+    private fun checkUserSession(){
+        val currentUser = FirebaseAuth.getInstance().currentUser?.email
+        if(currentUser != null && user==currentUser){
+            deleteImageView.visibility = View.VISIBLE
+            editImageView.visibility = View.VISIBLE
+
+            deleteImageView.setOnClickListener{
+                Log.d("VerRecetas", "Se hizo clic en DeleteImageView")
+            }
+
+            editImageView.setOnClickListener{
+                Log.d("VerRecetas", "Se hizo clic en EditImageView")
+            }
+        }else{
+            deleteImageView.visibility = View.GONE
+            editImageView.visibility = View.GONE
+        }
     }
 
 }
