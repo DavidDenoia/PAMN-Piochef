@@ -11,17 +11,15 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
-import org.checkerframework.common.subtyping.qual.Bottom
 
-class verRecetas : Fragment() {
+class VerRecetas : Fragment() {
     private var botonPreparacion: Button? = null
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
@@ -51,7 +49,7 @@ class verRecetas : Fragment() {
         ingredients = view.findViewById(R.id.ingredientsList)
 
         // Obtener datos de la receta
-        val user = arguments?.getString("user")
+        user = arguments?.getString("user")
         val recipeName = arguments?.getString("recipeName")
         val recipeId = arguments?.getString("recipeId")
 
@@ -89,13 +87,6 @@ class verRecetas : Fragment() {
                 }
                 ingredients?.text = stringBuilderIngre.toString()
             }
-        val tv = view?.findViewById<TextView>(R.id.nombre)
-        tv?.text = arguments?.getString("user")
-        user = arguments?.getString("user")
-        val recipeName = arguments?.getString("recipeName")
-        Log.e("RecipeClick", "Pepito: $recipeName, Usuario: $user")
-        // Inflate the layout for this fragment
-
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Manejar errores de lectura de la base de datos si es necesario
@@ -131,7 +122,6 @@ class verRecetas : Fragment() {
         }
 
         mostrarPreparacion()
-
 
         deleteImageView = view.findViewById(R.id.deleteImageView)
         editImageView = view.findViewById(R.id.editImageView)
