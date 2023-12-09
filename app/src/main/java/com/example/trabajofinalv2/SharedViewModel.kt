@@ -9,4 +9,6 @@ class SharedViewModel : ViewModel() {
     val recipeDescription = MutableLiveData<String>()
     val steps = MutableLiveData<List<String>>()
     val user = MutableLiveData<List<String>>()
+    val userImage = MutableLiveData<String>()
+    val userName = MutableLiveData<String>()
 }
