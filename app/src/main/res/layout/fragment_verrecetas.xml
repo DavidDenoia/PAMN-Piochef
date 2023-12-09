@@ -47,6 +47,22 @@
             android:text="Nombre de usuario"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingLeft="16dp"/>
+
+        <ImageView
+            android:id="@+id/editImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pencilsquare"
+            android:layout_marginStart="40dp"
+            android:padding="12dp"/>
+
+        <ImageView
+            android:id="@+id/deleteImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/eraserfill"
+            android:padding="12dp"/>
+
         
     </LinearLayout>
 
