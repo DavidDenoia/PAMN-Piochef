@@ -144,8 +144,6 @@
         <action
             android:id="@+id/action_verRecetas_to_pantallaAnadirReceta"
             app:destination="@id/pantallaAnadirReceta" />
-            android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
-            app:destination="@id/pantallaMenuInferior" />
     </fragment>
     <fragment
         android:id="@+id/cambiarContraseña"
