@@ -18,6 +18,12 @@ import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVis
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 
 class AnadirReceta1 : Fragment() {
 
@@ -107,15 +113,33 @@ class AnadirReceta1 : Fragment() {
                 stepsList.add(step.text.toString())
             }
 
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            if (userId != null) {
+                val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+
+                // Agrega un listener para obtener los datos del usuario desde la Realtime Database
+                databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val nombreUsuario = snapshot.child("username").getValue(String::class.java)
+                        val imagenUsuario = snapshot.child("profileImageUrl").getValue(String::class.java)
+                        sharedViewModel.userImage.value = imagenUsuario
+                        sharedViewModel.userName.value = nombreUsuario
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+            }
             // Guardar los datos en el ViewModel
             sharedViewModel.recipeName.value = recipeName
-            sharedViewModel.imageUris.value = imageUris
+            sharedViewModel.imageUris.value = imageUriStrings
             sharedViewModel.recipeDescription.value = recipeDescription
             sharedViewModel.steps.value = stepsList
 
 
 
-            findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2)
+
+                findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2)
         }
     }
 

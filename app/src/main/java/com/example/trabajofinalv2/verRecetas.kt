@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 
 class VerRecetas : Fragment() {
     private var botonPreparacion: Button? = null
@@ -32,6 +34,8 @@ class VerRecetas : Fragment() {
     private var user: String? = null
     private lateinit var deleteImageView: ImageView
     private lateinit var editImageView: ImageView
+    private lateinit var imagen: ImageView
+    private lateinit var fotoPerfil: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,45 +51,63 @@ class VerRecetas : Fragment() {
         descripcion = view.findViewById(R.id.description)
         steps = view.findViewById(R.id.stepsList)
         ingredients = view.findViewById(R.id.ingredientsList)
+        imagen = view.findViewById(R.id.imagenDecorativa)
+        fotoPerfil = view.findViewById(R.id.imagenUsuario)
 
         // Obtener datos de la receta
         user = arguments?.getString("user")
         val recipeName = arguments?.getString("recipeName")
         val recipeId = arguments?.getString("recipeId")
+        val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         // Referencia a la base de datos
         val databaseReference = FirebaseDatabase.getInstance().getReference("recipes").child(recipeId ?: "")
 
         databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Obtener la información del tiempo de preparación desde la base de datos
+                checkUserSession()
+                val recipeImage = dataSnapshot.child("imageUrls").getValue(object : GenericTypeIndicator<List<String>>() {})
+                if (recipeImage != null && recipeImage.isNotEmpty()) {
+                    Picasso.get().load(recipeImage[0]).into(imagen)
+                }
                 val tiempoPreparacion = dataSnapshot.child("preparationTime").getValue(String::class.java)
                 val tiempoMin = tiempoPreparacion + "min."
                 tiempoPreparacionTextView?.text = tiempoMin
-                nombreUsuario?.text = user
+
+                val imagenUser = dataSnapshot.child("userImage").getValue(String::class.java)
+                if (imagenUser != null && imagenUser.isNotEmpty()) {
+                    Picasso.get().load(imagenUser).into(fotoPerfil)
+                }
+
+                val nombre = dataSnapshot.child("userName").getValue(String::class.java)
+                nombreUsuario?.text = nombre
+
+                Log.d("verRecetas", "Nombre del usuario ${nombre}")
 
                 val recipeDescription = dataSnapshot.child("recipeDescription").getValue(String::class.java)
                 descripcion?.append(recipeDescription)
 
                 val stepsList = dataSnapshot.child("steps").getValue(object : GenericTypeIndicator<List<String>>() {})
                 val stringBuilder = StringBuilder()
+                var count = 1
                 if (stepsList != null) {
                     for (step in stepsList) {
-                        stringBuilder.append("- $step\n")
+                        stringBuilder.append("${count}- $step\n")
+                        count += 1
                     }
                 }
                 steps?.append(stringBuilder.toString())
+
 
                 val ingredientList = dataSnapshot.child("ingredients").getValue(object : GenericTypeIndicator<ArrayList<ArrayList<String>>>() {})
                 val stringBuilderIngre = StringBuilder()
                 if (ingredientList != null) {
                     for (step in ingredientList) {
-                        for (ingredient in step){
-                            stringBuilderIngre.append("- $ingredient\n")
-                        }
+                            stringBuilderIngre.append("- ${step[1]} ${step[2]} ${step[0]}")
                     }
                 }
                 ingredients?.text = stringBuilderIngre.toString()
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -93,6 +115,7 @@ class VerRecetas : Fragment() {
                 Log.e("VerRecetas", "Error al obtener datos de la base de datos: ${databaseError.message}")
             }
         })
+
 
         return view
     }

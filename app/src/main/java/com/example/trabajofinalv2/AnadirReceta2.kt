@@ -123,6 +123,8 @@ class AnadirReceta2 : Fragment() {
         var observedImageUris = listOf<String>()
         var observedRecipeDescription = ""
         var observedSteps = listOf<String>()
+        var observedUserName = ""
+        var observedUserImage = ""
 
         // Observar los datos y actuar en consecuencia
         sharedViewModel.recipeName.observe(viewLifecycleOwner, Observer { recipeName ->
@@ -147,6 +149,16 @@ class AnadirReceta2 : Fragment() {
             // Manejar los pasos
             observedSteps = steps
             Log.d("SharedViewModel", "Steps: $observedSteps")
+        })
+
+        sharedViewModel.userName.observe(viewLifecycleOwner, Observer { userName ->
+            // Manejar los pasos
+            observedUserName = userName
+        })
+
+        sharedViewModel.userImage.observe(viewLifecycleOwner, Observer { userImage ->
+            // Manejar los pasos
+            observedUserImage = userImage
         })
 
 
@@ -177,7 +189,7 @@ class AnadirReceta2 : Fragment() {
             }
             //pag3
             lifecycleScope.launch{
-                registraValores(observedRecipeName,observedImageUris,observedRecipeDescription,observedSteps)
+                registraValores(observedRecipeName,observedImageUris,observedRecipeDescription,observedSteps, observedUserName, observedUserImage)
             }
         }
 
@@ -188,7 +200,7 @@ class AnadirReceta2 : Fragment() {
 
 
     }
-    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>){
+    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>, userName: String, userImage: String){
         // Obtener la instancia de FirebaseAuth
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -205,7 +217,9 @@ class AnadirReceta2 : Fragment() {
                 "preparationTime" to tprep,
                 "numRations" to nrac,
                 "ingredients" to ingList,
-                "user" to user.email
+                "user" to user.email,
+                "userName" to userName,
+                "userImage" to userImage
             )
 
             val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
