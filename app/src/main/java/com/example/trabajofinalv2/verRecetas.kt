@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.google.firebase.ktx.Firebase
 import org.checkerframework.common.subtyping.qual.Bottom
+
 class VerRecetas : Fragment() {
     lateinit var backButton: ImageView
 
@@ -67,7 +68,8 @@ class VerRecetas : Fragment() {
         recipeId = arguments?.getString("recipeId")
         val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
-
+        // Referencia a la base de datos
+        val databaseReference = FirebaseDatabase.getInstance().getReference("recipes").child(recipeId ?: "")
 
         databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -90,6 +92,8 @@ class VerRecetas : Fragment() {
 
                 Log.d("verRecetas", "Nombre del usuario ${nombre}")
 
+                val recipeDescription = dataSnapshot.child("recipeDescription").getValue(String::class.java)
+                descripcion?.append(recipeDescription)
 
                 val stepsList = dataSnapshot.child("steps").getValue(object : GenericTypeIndicator<List<String>>() {})
                 val stringBuilder = StringBuilder()
@@ -113,12 +117,6 @@ class VerRecetas : Fragment() {
                 ingredients?.text = stringBuilderIngre.toString()
 
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Manejar errores de lectura de la base de datos si es necesario
-                Log.e("VerRecetas", "Error al obtener datos de la base de datos: ${databaseError.message}")
-            }
-        })
 
 
         return view
