@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.content.Intent
 import android.util.Log
 import android.window.BackEvent
+import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -55,7 +56,14 @@ class AnadirReceta1 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                    findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaMenuInferior)
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_anadir_receta1, container, false)
     }
 

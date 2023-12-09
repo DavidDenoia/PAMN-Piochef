@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Vector
 import android.net.Uri
+import androidx.activity.addCallback
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -47,6 +48,14 @@ class AnadirReceta2 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                    findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta)
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_anadir_receta_2, container, false)
         }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

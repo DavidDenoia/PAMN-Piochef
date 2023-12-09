@@ -10,12 +10,14 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import org.checkerframework.common.subtyping.qual.Bottom
 
-class verRecetas : Fragment() {
+class verRecetas : Fragment(R.layout.fragment_verrecetas) {
     private var botonPreparacion: Button? = null
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
@@ -29,19 +31,23 @@ class verRecetas : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val tv = view?.findViewById<TextView>(R.id.nombre)
         tv?.text = arguments?.getString("user")
         user = arguments?.getString("user")
         val recipeName = arguments?.getString("recipeName")
         Log.e("RecipeClick", "Pepito: $recipeName, Usuario: $user")
         // Inflate the layout for this fragment
-
-
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                    findNavController().navigate(R.id.action_verRecetas_to_pantallaMenuInferior)
+                }
+            }
+        }
         return inflater.inflate(R.layout.fragment_verrecetas, container, false)
-
-
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -108,5 +114,9 @@ class verRecetas : Fragment() {
             editImageView.visibility = View.GONE
         }
     }
-
+    private fun setCurrentFragment(fragment: Fragment) {
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.containerView, fragment)
+        transaction?.commit()
+    }
 }
