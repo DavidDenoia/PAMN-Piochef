@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import androidx.activity.addCallback
 import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -21,6 +22,9 @@ class AnadirReceta3 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            findNavController().navigate(R.id.action_pantallaAnadirReceta3_to_pantallaMenuInferior)
+        }
         return inflater.inflate(R.layout.fragment_anadir_receta_3, container, false)
         }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
