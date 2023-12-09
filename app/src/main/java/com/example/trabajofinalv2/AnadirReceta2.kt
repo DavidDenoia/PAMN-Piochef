@@ -41,7 +41,7 @@ class AnadirReceta2 : Fragment() {
 
     private lateinit var nrac: String
     private lateinit var tprep: String
-    private var ingList = ArrayList<ArrayList<String>>()
+    private var ingList = ArrayList<IngredientesData>()
     private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -183,17 +183,19 @@ class AnadirReceta2 : Fragment() {
 
             tprep = view.findViewById<EditText>(R.id.tiempoInput).text.toString()
             nrac = view.findViewById<EditText>(R.id.racionesInput).text.toString()
-            ingList = ArrayList<ArrayList<String>>()
+            //ingList = ArrayList<ArrayList<String>>()
             var ingn = ArrayList<String>()
+            ingList = ArrayList<IngredientesData>()
             for(i in 0 until stepsLayout.childCount){
                 val step = stepsLayout.getChildAt(i) as LinearLayout
                 val noming = step.getChildAt(0) as? EditText
                 val caning = step.getChildAt(1) as? EditText
                 val mling = step.getChildAt(2) as? EditText
+                val dataIng = IngredientesData(noming?.text.toString(), caning?.text.toString(), mling?.text.toString())
                 ingn.add(noming?.text.toString())
                 ingn.add(caning?.text.toString())
                 ingn.add(mling?.text.toString())
-                ingList.add(ingn)
+                ingList.add(dataIng)
                 Log.i(tag,caning?.text.toString())
             }
             //pag3

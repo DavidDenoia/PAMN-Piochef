@@ -139,11 +139,18 @@
         android:label="fragment_ver_recetas"
         tools:layout="@layout/fragment_verrecetas">
         <action
+
             android:id="@+id/action_verRecetas_to_pantallaprincipal"
             app:destination="@id/pantallaprincipal" />
         <action
             android:id="@+id/action_verRecetas_to_pantallaAnadirReceta"
             app:destination="@id/pantallaAnadirReceta" />
+
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
+            app:destination="@id/pantallaMenuInferior" />
+
+        <action
             android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>

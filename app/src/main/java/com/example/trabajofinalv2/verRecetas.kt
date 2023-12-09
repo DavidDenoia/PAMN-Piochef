@@ -26,16 +26,20 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
-import com.google.firebase.ktx.Firebase
-import org.checkerframework.common.subtyping.qual.Bottom
+import androidx.activity.addCallback
 
-class VerRecetas : Fragment() {
-    lateinit var backButton: ImageView
+
+class VerRecetas : Fragment(R.layout.fragment_verrecetas) {
 
     private var botonPreparacion: Button? = null
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
     private var contenedorIngredientes: FrameLayout? = null
+    private var tiempoPreparacionTextView: TextView? = null
+    private var nombreUsuario: TextView? = null
+    private var descripcion: TextView? = null
+    private var steps: TextView? = null
+    private var ingredients: TextView? = null
     private var user: String? = null
     private var recipeId: String? = null
     private lateinit var deleteImageView: ImageView
@@ -51,7 +55,6 @@ class VerRecetas : Fragment() {
         val view = inflater.inflate(R.layout.fragment_verrecetas, container, false)
 
         // Referencias a los elementos del layout
-        backButton = view.findViewById(R.id.flecha_atras)
         contenedorPreparacion = view.findViewById(R.id.contenedorPreparacion)
         contenedorIngredientes = view.findViewById(R.id.contenedorIngredientes)
         tiempoPreparacionTextView = view.findViewById(R.id.textoSuperpuesto)
@@ -74,11 +77,13 @@ class VerRecetas : Fragment() {
         databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 checkUserSession()
-                val recipeImage = dataSnapshot.child("imageUrls").getValue(object : GenericTypeIndicator<List<String>>() {})
+                val recipeImage = dataSnapshot.child("imageUrls")
+                    .getValue(object : GenericTypeIndicator<List<String>>() {})
                 if (recipeImage != null && recipeImage.isNotEmpty()) {
                     Picasso.get().load(recipeImage[0]).into(imagen)
                 }
-                val tiempoPreparacion = dataSnapshot.child("preparationTime").getValue(String::class.java)
+                val tiempoPreparacion =
+                    dataSnapshot.child("preparationTime").getValue(String::class.java)
                 val tiempoMin = tiempoPreparacion + "min."
                 tiempoPreparacionTextView?.text = tiempoMin
 
@@ -92,10 +97,12 @@ class VerRecetas : Fragment() {
 
                 Log.d("verRecetas", "Nombre del usuario ${nombre}")
 
-                val recipeDescription = dataSnapshot.child("recipeDescription").getValue(String::class.java)
+                val recipeDescription =
+                    dataSnapshot.child("recipeDescription").getValue(String::class.java)
                 descripcion?.append(recipeDescription)
 
-                val stepsList = dataSnapshot.child("steps").getValue(object : GenericTypeIndicator<List<String>>() {})
+                val stepsList = dataSnapshot.child("steps")
+                    .getValue(object : GenericTypeIndicator<List<String>>() {})
                 val stringBuilder = StringBuilder()
                 var count = 1
                 if (stepsList != null) {
@@ -107,21 +114,31 @@ class VerRecetas : Fragment() {
                 steps?.append(stringBuilder.toString())
 
 
-                val ingredientList = dataSnapshot.child("ingredients").getValue(object : GenericTypeIndicator<ArrayList<ArrayList<String>>>() {})
+                val ingredientList = dataSnapshot.child("ingredients")
+                    .getValue(object : GenericTypeIndicator<ArrayList<IngredientesData>>() {})
                 val stringBuilderIngre = StringBuilder()
                 if (ingredientList != null) {
                     for (step in ingredientList) {
-                            stringBuilderIngre.append("- ${step[1]} ${step[2]} ${step[0]}\n")
+                        stringBuilderIngre.append("- ${step.cantidad} ${step.unidad} ${step.ingrediente}\n")
                     }
                 }
                 ingredients?.text = stringBuilderIngre.toString()
-
             }
 
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
 
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                }
+            }
+        }
         return view
-
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -155,6 +172,8 @@ class VerRecetas : Fragment() {
         checkUserSession()
     }
 
+
+
     private fun mostrarPreparacion(){
         contenedorPreparacion?.visibility = View.VISIBLE
         contenedorIngredientes?.visibility = View.GONE
@@ -169,7 +188,6 @@ class VerRecetas : Fragment() {
         contenedorIngredientes?.visibility = View.VISIBLE
         Log.d("Mostrar ingredientes", "Mostrando los ingredientes de la receta")
     }
-
     private fun checkUserSession(){
         val currentUser = FirebaseAuth.getInstance().currentUser?.email
         if(currentUser != null && user==currentUser){
