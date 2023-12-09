@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
@@ -17,11 +16,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
-import org.checkerframework.common.subtyping.qual.Bottom
 
-class verRecetas : Fragment() {
+class VerRecetas : Fragment() {
     private var botonPreparacion: Button? = null
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
@@ -31,10 +27,6 @@ class verRecetas : Fragment() {
     private var descripcion: TextView? = null
     private var steps: TextView? = null
     private var ingredients: TextView? = null
-    private var user: String? = null
-    private lateinit var deleteImageView: ImageView
-    private lateinit var editImageView: ImageView
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -89,13 +81,6 @@ class verRecetas : Fragment() {
                 }
                 ingredients?.text = stringBuilderIngre.toString()
             }
-        val tv = view?.findViewById<TextView>(R.id.nombre)
-        tv?.text = arguments?.getString("user")
-        user = arguments?.getString("user")
-        val recipeName = arguments?.getString("recipeName")
-        Log.e("RecipeClick", "Pepito: $recipeName, Usuario: $user")
-        // Inflate the layout for this fragment
-
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Manejar errores de lectura de la base de datos si es necesario
@@ -132,11 +117,6 @@ class verRecetas : Fragment() {
 
         mostrarPreparacion()
 
-
-        deleteImageView = view.findViewById(R.id.deleteImageView)
-        editImageView = view.findViewById(R.id.editImageView)
-        checkUserSession()
-
     }
 
     private fun mostrarPreparacion(){
@@ -152,25 +132,6 @@ class verRecetas : Fragment() {
         contenedorPreparacion?.visibility = View.GONE
         contenedorIngredientes?.visibility = View.VISIBLE
         Log.d("Mostrar ingredientes", "Mostrando los ingredientes de la receta")
-    }
-
-    private fun checkUserSession(){
-        val currentUser = FirebaseAuth.getInstance().currentUser?.email
-        if(currentUser != null && user==currentUser){
-            deleteImageView.visibility = View.VISIBLE
-            editImageView.visibility = View.VISIBLE
-
-            deleteImageView.setOnClickListener{
-                Log.d("VerRecetas", "Se hizo clic en DeleteImageView")
-            }
-
-            editImageView.setOnClickListener{
-                Log.d("VerRecetas", "Se hizo clic en EditImageView")
-            }
-        }else{
-            deleteImageView.visibility = View.GONE
-            editImageView.visibility = View.GONE
-        }
     }
 
 }
