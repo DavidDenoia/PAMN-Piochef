@@ -141,6 +141,12 @@
         android:name="com.example.trabajofinalv2.VerRecetas"
         android:label="fragment_ver_recetas"
         tools:layout="@layout/fragment_verrecetas">
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaprincipal"
+            app:destination="@id/pantallaprincipal" />
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaAnadirReceta"
+            app:destination="@id/pantallaAnadirReceta" />
     </fragment>
     <fragment
         android:id="@+id/cambiarContraseña"

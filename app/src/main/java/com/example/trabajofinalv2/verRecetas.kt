@@ -1,17 +1,22 @@
 package com.example.trabajofinalv2
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,6 +27,7 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 class VerRecetas : Fragment() {
+    lateinit var backButton: ImageView
     private var botonPreparacion: Button? = null
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
@@ -32,6 +38,7 @@ class VerRecetas : Fragment() {
     private var steps: TextView? = null
     private var ingredients: TextView? = null
     private var user: String? = null
+    private var recipeId: String? = null
     private lateinit var deleteImageView: ImageView
     private lateinit var editImageView: ImageView
     private lateinit var imagen: ImageView
@@ -44,6 +51,7 @@ class VerRecetas : Fragment() {
         val view = inflater.inflate(R.layout.fragment_verrecetas, container, false)
 
         // Referencias a los elementos del layout
+        backButton = view.findViewById(R.id.flecha_atras)
         contenedorPreparacion = view.findViewById(R.id.contenedorPreparacion)
         contenedorIngredientes = view.findViewById(R.id.contenedorIngredientes)
         tiempoPreparacionTextView = view.findViewById(R.id.textoSuperpuesto)
@@ -57,7 +65,7 @@ class VerRecetas : Fragment() {
         // Obtener datos de la receta
         user = arguments?.getString("user")
         val recipeName = arguments?.getString("recipeName")
-        val recipeId = arguments?.getString("recipeId")
+        recipeId = arguments?.getString("recipeId")
         val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         // Referencia a la base de datos
@@ -103,7 +111,7 @@ class VerRecetas : Fragment() {
                 val stringBuilderIngre = StringBuilder()
                 if (ingredientList != null) {
                     for (step in ingredientList) {
-                            stringBuilderIngre.append("- ${step[1]} ${step[2]} ${step[0]}")
+                            stringBuilderIngre.append("- ${step[1]} ${step[2]} ${step[0]}\n")
                     }
                 }
                 ingredients?.text = stringBuilderIngre.toString()
@@ -173,10 +181,34 @@ class VerRecetas : Fragment() {
             editImageView.visibility = View.VISIBLE
 
             deleteImageView.setOnClickListener{
-                Log.d("VerRecetas", "Se hizo clic en DeleteImageView")
+                if (!recipeId.isNullOrEmpty()) {
+                    val alertDialogBuilder = AlertDialog.Builder(context)
+
+                    alertDialogBuilder.setTitle("Confirmación")
+                    alertDialogBuilder.setMessage("¿Estás seguro de que quieres eliminar esta receta?")
+
+                    val recipeReference = FirebaseDatabase.getInstance().getReference("recipes").child(recipeId?:"")
+                    alertDialogBuilder.setPositiveButton("Si") { dialog, which ->
+                        recipeReference.removeValue()
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Receta eliminada correctamente", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "No se ha podido eliminar la receta", Toast.LENGTH_SHORT).show()
+                            }
+                        findNavController().navigate(R.id.action_verRecetas_to_pantallaprincipal)
+                    }
+                    alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+                        Toast.makeText(context, "No se eliminará la receta", Toast.LENGTH_SHORT).show()
+                    }
+
+                    val alertDialog = alertDialogBuilder.create()
+                    alertDialog.show()
+                }
             }
 
             editImageView.setOnClickListener{
+                findNavController().navigate(R.id.action_verRecetas_to_pantallaAnadirReceta)
                 Log.d("VerRecetas", "Se hizo clic en EditImageView")
             }
         }else{
@@ -184,5 +216,5 @@ class VerRecetas : Fragment() {
             editImageView.visibility = View.GONE
         }
     }
-
 }
+
