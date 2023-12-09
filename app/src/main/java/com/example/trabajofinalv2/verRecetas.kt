@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -27,6 +29,10 @@ class VerRecetas : Fragment() {
     private var descripcion: TextView? = null
     private var steps: TextView? = null
     private var ingredients: TextView? = null
+    private var user: String? = null
+    private lateinit var deleteImageView: ImageView
+    private lateinit var editImageView: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +49,7 @@ class VerRecetas : Fragment() {
         ingredients = view.findViewById(R.id.ingredientsList)
 
         // Obtener datos de la receta
-        val user = arguments?.getString("user")
+        user = arguments?.getString("user")
         val recipeName = arguments?.getString("recipeName")
         val recipeId = arguments?.getString("recipeId")
 
@@ -132,6 +138,25 @@ class VerRecetas : Fragment() {
         contenedorPreparacion?.visibility = View.GONE
         contenedorIngredientes?.visibility = View.VISIBLE
         Log.d("Mostrar ingredientes", "Mostrando los ingredientes de la receta")
+    }
+
+    private fun checkUserSession(){
+        val currentUser = FirebaseAuth.getInstance().currentUser?.email
+        if(currentUser != null && user==currentUser){
+            deleteImageView.visibility = View.VISIBLE
+            editImageView.visibility = View.VISIBLE
+
+            deleteImageView.setOnClickListener{
+                Log.d("VerRecetas", "Se hizo clic en DeleteImageView")
+            }
+
+            editImageView.setOnClickListener{
+                Log.d("VerRecetas", "Se hizo clic en EditImageView")
+            }
+        }else{
+            deleteImageView.visibility = View.GONE
+            editImageView.visibility = View.GONE
+        }
     }
 
 }
