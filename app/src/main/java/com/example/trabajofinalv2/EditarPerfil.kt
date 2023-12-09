@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
@@ -101,9 +102,21 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
                 cambiarDescripcion(nuevaDescripcion, requireContext())
             }
         }
+
         //Cambiar contraseña
         cambiarContra.setOnClickListener {
             findNavController().navigate(R.id.action_pantallaEditarPefil_to_cambiarContraseña)
+        }
+
+        //backpressed
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    findNavController().navigate(R.id.action_pantallaEditarPefil_to_pantallaMenuInferior)
+                    isEnabled = false
+
+                }
+            }
         }
     }
     // En el método onActivityResult

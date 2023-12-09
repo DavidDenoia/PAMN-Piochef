@@ -130,9 +130,6 @@
         android:label="fragment_anadir_receta3"
         tools:layout="@layout/fragment_anadir_receta_3" >
         <action
-            android:id="@+id/action_pantallaAnadirReceta3_to_pantallaAnadirReceta2"
-            app:destination="@id/pantallaAnadirReceta2" />
-        <action
             android:id="@+id/action_pantallaAnadirReceta3_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>
@@ -142,11 +139,16 @@
         android:label="fragment_ver_recetas"
         tools:layout="@layout/fragment_verrecetas">
         <action
+
             android:id="@+id/action_verRecetas_to_pantallaprincipal"
             app:destination="@id/pantallaprincipal" />
         <action
             android:id="@+id/action_verRecetas_to_pantallaAnadirReceta"
             app:destination="@id/pantallaAnadirReceta" />
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
+            app:destination="@id/pantallaMenuInferior" />
+
     </fragment>
     <fragment
         android:id="@+id/cambiarContraseña"

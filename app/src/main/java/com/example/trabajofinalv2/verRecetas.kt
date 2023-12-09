@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -25,24 +26,22 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
-
+import com.google.firebase.ktx.Firebase
+import org.checkerframework.common.subtyping.qual.Bottom
 class VerRecetas : Fragment() {
     lateinit var backButton: ImageView
+
     private var botonPreparacion: Button? = null
     private var botonIngredientes: Button? = null
     private var contenedorPreparacion: FrameLayout? = null
     private var contenedorIngredientes: FrameLayout? = null
-    private var tiempoPreparacionTextView: TextView? = null
-    private var nombreUsuario: TextView? = null
-    private var descripcion: TextView? = null
-    private var steps: TextView? = null
-    private var ingredients: TextView? = null
     private var user: String? = null
     private var recipeId: String? = null
     private lateinit var deleteImageView: ImageView
     private lateinit var editImageView: ImageView
     private lateinit var imagen: ImageView
     private lateinit var fotoPerfil: ImageView
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,8 +67,7 @@ class VerRecetas : Fragment() {
         recipeId = arguments?.getString("recipeId")
         val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
-        // Referencia a la base de datos
-        val databaseReference = FirebaseDatabase.getInstance().getReference("recipes").child(recipeId ?: "")
+
 
         databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -92,8 +90,6 @@ class VerRecetas : Fragment() {
 
                 Log.d("verRecetas", "Nombre del usuario ${nombre}")
 
-                val recipeDescription = dataSnapshot.child("recipeDescription").getValue(String::class.java)
-                descripcion?.append(recipeDescription)
 
                 val stepsList = dataSnapshot.child("steps").getValue(object : GenericTypeIndicator<List<String>>() {})
                 val stringBuilder = StringBuilder()
@@ -126,6 +122,7 @@ class VerRecetas : Fragment() {
 
 
         return view
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -153,6 +150,7 @@ class VerRecetas : Fragment() {
         }
 
         mostrarPreparacion()
+
 
         deleteImageView = view.findViewById(R.id.deleteImageView)
         editImageView = view.findViewById(R.id.editImageView)
