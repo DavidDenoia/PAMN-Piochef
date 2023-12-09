@@ -53,13 +53,21 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         adapter = MainAdapter(requireContext(), object : MainAdapter.OnRecipeClickListener{
             override fun onRecipeClick(recipeName: String, user: String) {
-                //Log.e("RecipeClick", "Nombre de la receta: $recipeName, Usuario: $user")
-                val bundle = bundleOf("recipeName" to recipeName,
-                    "user" to user)
-                findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
+                obtainRecipeId(recipeName) { recipeId ->
+                    if (recipeId != null) {
+                        val bundle = bundleOf(
+                            "recipeName" to recipeName,
+                            "user" to user,
+                            "recipeId" to recipeId
+                        )
+
+                        findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
+                    } else {
+                        // Manejar el caso en el que no se encontró ninguna receta con ese nombre
+                    }
+                }
             }
         })
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recetasRecyclerView)
@@ -85,5 +93,27 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
         })
     }
 
+    private fun obtainRecipeId(recipeName: String, callback: (String?) -> Unit) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("recipes")
+
+        databaseReference.orderByChild("recipeName").equalTo(recipeName)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (recipeSnapshot in dataSnapshot.children) {
+                            val recipeId = recipeSnapshot.key
+                            callback(recipeId)
+                            return
+                        }
+                    } else {
+                        callback(null)
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    callback(null)
+                }
+            })
+    }
 
 }

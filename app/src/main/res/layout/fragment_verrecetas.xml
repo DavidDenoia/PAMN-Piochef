@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".verRecetas">
+    tools:context=".VerRecetas">
 
     <Button
         android:id="@+id/foto"
@@ -70,13 +70,15 @@
             android:id="@+id/textoSuperpuesto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="8dp"
-            android:text="Hora"
-            android:background="@color/grey"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
             android:padding="4dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:drawableLeft="@drawable/clock_history"
+            android:drawablePadding="8dp"/>
 
     </RelativeLayout>
 
@@ -95,7 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Preparación"
-            android:background="@color/white"/>
+            android:textColor="@color/white"
+            android:background="@color/custom_color_primary"/>
 
         <Button
             android:id="@+id/botonIngredientes"
@@ -103,29 +106,56 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Ingredientes"
-            android:background="@color/custom_color_primary"/>
+            android:background="@color/white"/>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/contenedorPreparacion"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="411dp"
+        android:layout_height="272dp"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@+id/botones"
-        android:visibility="visible">
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botones">
 
-        <TextView
-            android:id="@+id/textViewPreparacion"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top"
-            android:text="Preparacion"
-            android:textColor="@color/custom_color_primary"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+            android:gravity="center"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textViewPreparacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="20dp"
+                android:text="Preparación"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/custom_color_primary" />
 
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="338dp"
+                android:layout_height="98dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:paddingTop="2dp"
+                android:text="Descripción:\n"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/custom_color_primary" />
 
+            <TextView
+                android:id="@+id/stepsList"
+                android:layout_width="338dp"
+                android:layout_height="98dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Pasos a seguir:\n"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/custom_color_primary"/>
+
+            </LinearLayout>
     </FrameLayout>
 
 
@@ -147,6 +177,16 @@
             android:textColor="@color/custom_color_primary"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
+
+        <TextView
+            android:id="@+id/ingredientsList"
+            android:layout_width="338dp"
+            android:layout_height="98dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="ingredientes"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/custom_color_primary"/>
 
 
 
