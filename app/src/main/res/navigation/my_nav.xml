@@ -138,7 +138,7 @@
     </fragment>
     <fragment
         android:id="@+id/verRecetas"
-        android:name="com.example.trabajofinalv2.verRecetas"
+        android:name="com.example.trabajofinalv2.VerRecetas"
         android:label="fragment_ver_recetas"
         tools:layout="@layout/fragment_verrecetas">
     </fragment>
