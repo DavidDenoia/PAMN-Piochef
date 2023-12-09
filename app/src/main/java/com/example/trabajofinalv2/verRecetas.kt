@@ -123,6 +123,9 @@ class VerRecetas : Fragment() {
 
         mostrarPreparacion()
 
+        deleteImageView = view.findViewById(R.id.deleteImageView)
+        editImageView = view.findViewById(R.id.editImageView)
+        checkUserSession()
     }
 
     private fun mostrarPreparacion(){
