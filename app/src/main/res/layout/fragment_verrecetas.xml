@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    tools:context=".VerRecetas">
+    android:layout_width="match_parent">
 
-
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".VerRecetas">
 
     <Button
         android:id="@+id/foto"
@@ -19,16 +22,6 @@
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/flecha_atras"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:src="@drawable/unindent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="2dp"/>
 
     
     <LinearLayout
@@ -90,7 +83,7 @@
             android:id="@+id/imagenDecorativa"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/noimage"
             android:scaleType="centerCrop"
              />
 
@@ -165,7 +158,7 @@
             <TextView
                 android:id="@+id/description"
                 android:layout_width="338dp"
-                android:layout_height="98dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:paddingTop="2dp"
@@ -176,7 +169,7 @@
             <TextView
                 android:id="@+id/stepsList"
                 android:layout_width="338dp"
-                android:layout_height="98dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:text="Pasos a seguir:\n"
@@ -208,7 +201,7 @@
         <TextView
             android:id="@+id/ingredientsList"
             android:layout_width="338dp"
-            android:layout_height="98dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:text="ingredientes"
@@ -229,4 +222,6 @@
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
