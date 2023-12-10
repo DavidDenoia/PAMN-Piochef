@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -18,13 +20,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 
-class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
+class PantallaGuardarRecetas : Fragment(R.layout.fragment_pantalla_principal) {
 
     private lateinit var adapter:MainAdapter
     private val viewModel by lazy{
@@ -47,7 +50,13 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
         }
 
 
-
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                }
+            }
+        }
         return view
     }
 
@@ -75,18 +84,10 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
         recyclerView?.addItemDecoration(DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL))
         recyclerView?.adapter = adapter
         observeData()
-        /*val dummyList = mutableListOf<Recipe>()
-        dummyList.add(Recipe("Paco","https://s3.abcstatics.com/media/gurmesevilla/2012/01/comida-rapida-casera.jpg","Hamburguesa"))
-        dummyList.add(Recipe("Pepe","https://s3.abcstatics.com/media/gurmesevilla/2012/01/comida-rapida-casera.jpg","Hamburguesa2"))
-
-
-
-        adapter.setListData(dummyList)
-        adapter.notifyDataSetChanged()*/
     }
 
     fun observeData(){
-        viewModel.fetchRecipeData().observe(viewLifecycleOwner, Observer {
+        viewModel.fetchStoredRecipeData().observe(viewLifecycleOwner, Observer {
             adapter.setListData(it)
             adapter.notifyDataSetChanged()
         })
@@ -94,7 +95,6 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
 
     private fun obtainRecipeId(recipeName: String, callback: (String?) -> Unit) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("recipes")
-
         databaseReference.orderByChild("recipeName").equalTo(recipeName)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -108,7 +108,6 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
                         callback(null)
                     }
                 }
-
                 override fun onCancelled(databaseError: DatabaseError) {
                     callback(null)
                 }

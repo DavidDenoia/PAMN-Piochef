@@ -38,15 +38,39 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="8dp"/>
 
-            <TextView
-                android:id="@+id/recipe_name"
+            <LinearLayout
+                android:id="@+id/horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre de la receta"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black"
-                android:layout_marginTop="8dp"/>
+                android:background="?android:attr/selectableItemBackground"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/recipe_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Nombre de la receta"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black" />
+
+                <ImageButton
+                    android:id="@+id/guardarboton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bookmark_frame"
+                    android:text="Nombre de la receta"
+
+                    />
+
+                <Button
+                    android:id="@+id/borrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bookmark_frame"
+                    android:background="@color/red"
+                    android:text="X" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -140,6 +140,7 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
                 }
                 R.id.recetaguradada -> {
                     //perfil a receta guardada
+                    findNavController().navigate(R.id.action_pantallaMenuInferior_to_guardarRecetas)
                 }
                 R.id.editarperfil -> {
                     findNavController().navigate(R.id.action_pantallaMenuInferior_to_pantallaEditarPefil)

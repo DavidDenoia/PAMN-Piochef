@@ -1,14 +1,23 @@
 package com.example.trabajofinalv2
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainAdapter(
     private val context: Context,
@@ -56,6 +65,121 @@ class MainAdapter(
             cardView.setOnClickListener {
                 itemClickListener.onRecipeClick(receta.recipeName, receta.user)
             }
+            val guardar = itemView.findViewById<ImageButton>(R.id.guardarboton)
+            guardar.setOnClickListener {
+                guardarDatosRecetas(receta.user, receta.recipeName)
+            }
+            val checkBorrar = checkErase(itemView,receta.user,receta.recipeName)
+            val borrar = itemView.findViewById<Button>(R.id.borrar)
+            borrar.setOnClickListener {
+                borrarDatosRecetas(receta.user, receta.recipeName)
+            }
+        }
+    }
+    private fun guardarDatosRecetas(usuario: String,nombreReceta:String ){
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val datosReceta = ArrayList<String>()
+        datosReceta.add(usuario)
+        datosReceta.add(nombreReceta)
+        if (userId != null) {
+            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.hasChild("recetasGuardadas")) {
+                        val descripcion = snapshot.child("recetasGuardadas").value as ArrayList<String>
+                        for (value in descripcion){
+                            datosReceta.add(value)
+                        }
+                        if(datosReceta.get(0) in descripcion && datosReceta.get(1) in descripcion){
+                            datosReceta.removeAt(0)
+                            datosReceta.removeAt(0)
+                        }
+                        val updates = hashMapOf<String, Any>(
+                            "recetasGuardadas" to datosReceta
+                        )
+                        databaseReference.updateChildren(updates)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Receta guardada", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        val updates = hashMapOf<String, Any>(
+                            "recetasGuardadas" to datosReceta
+                        )
+                        databaseReference.updateChildren(updates)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Receta guardada", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
+
+        }
+    }
+    private fun borrarDatosRecetas(usuario: String,nombreReceta:String ){
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.hasChild("recetasGuardadas")) {
+                        val descripcion = snapshot.child("recetasGuardadas").value as ArrayList<String>
+                        descripcion.remove(usuario)
+                        descripcion.remove(nombreReceta)
+                        val updates = hashMapOf<String, Any>(
+                            "recetasGuardadas" to descripcion
+                        )
+                        databaseReference.updateChildren(updates)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Receta guardada", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
+
+        }
+    }
+    private fun checkErase(itemView: View,usuario: String,nombreReceta:String){
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.hasChild("recetasGuardadas")) {
+                        val receta = snapshot.child("recetasGuardadas").value as ArrayList<String>
+                        val borrar = itemView.findViewById<Button>(R.id.borrar)
+                        val guardar = itemView.findViewById<ImageButton>(R.id.guardarboton)
+                        if(usuario in receta && nombreReceta in receta){
+                            borrar.visibility = View.VISIBLE
+                            guardar.visibility = View.GONE
+                        } else{
+                            borrar.visibility = View.GONE
+                            guardar.visibility = View.VISIBLE
+                        }
+                    } else {
+                        val borrar = itemView.findViewById<Button>(R.id.borrar)
+                        borrar.visibility = View.GONE
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
 
         }
     }
