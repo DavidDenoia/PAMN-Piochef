@@ -139,7 +139,7 @@ class MainAdapter(
                         )
                         databaseReference.updateChildren(updates)
                             .addOnSuccessListener {
-                                Toast.makeText(context, "Receta guardada", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Receta borrada", Toast.LENGTH_SHORT).show()
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
