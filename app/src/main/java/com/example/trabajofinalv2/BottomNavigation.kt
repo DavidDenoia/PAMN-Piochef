@@ -42,6 +42,12 @@ class BottomNavigation : Fragment(R.layout.fragment_menu_inferior) {
                 return true
             }
 
+            R.id.nav_add_recetas -> {
+                val newFragment = AnadirReceta1()
+                setCurrentFragment(newFragment)
+                return true
+            }
+
             R.id.nav_inicio -> {
                 val newFragment = PantallaPrincipal()
                 setCurrentFragment(newFragment)
