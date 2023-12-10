@@ -38,7 +38,7 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
     lateinit var fotoPerfil: ImageView
     lateinit var usernameText: TextView
     lateinit var userDescription: TextView
-    private var userEmail: String = ""
+    private var userEmail: String = obtenerUserEmail()
 
     private lateinit var adapter:UserRecipeAdapter
     private val viewModel by lazy{
@@ -93,14 +93,15 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = UserRecipeAdapter(requireContext(), object : UserRecipeAdapter.OnRecipeClickListener{
+        adapter = UserRecipeAdapter(requireContext(), userEmail, object : UserRecipeAdapter.OnRecipeClickListener{
             override fun onRecipeClick(recipeName: String, user: String) {
                 obtainRecipeId(recipeName) { recipeId ->
                     if (recipeId != null) {
                         if(userEmail == user){
                             val bundle = bundleOf(
                                 "recipeName" to recipeName,
-                                "recipeId" to recipeId
+                                "recipeId" to recipeId,
+                                "user" to user
                             )
                             findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
                         }
@@ -235,4 +236,13 @@ private fun obtainRecipeId(recipeName: String, callback: (String?) -> Unit) {
                 callback(null)
             }
         })
+}
+
+private fun obtenerUserEmail(): String {
+    var userEmail: String = ""
+    val user = FirebaseAuth.getInstance().currentUser
+    if (user != null) {
+        userEmail = user.email ?: ""
+    }
+    return userEmail
 }

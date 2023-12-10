@@ -59,16 +59,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/bookmark_frame"
+                    android:background="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
                     android:text="Nombre de la receta"
 
                     />
 
-                <Button
+                <ImageButton
                     android:id="@+id/borrar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/bookmark_frame"
-                    android:background="@color/red"
+                    android:background="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/bookmark_x"
                     android:text="X" />
             </LinearLayout>
         </LinearLayout>

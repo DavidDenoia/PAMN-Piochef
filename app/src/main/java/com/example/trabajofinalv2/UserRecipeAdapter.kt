@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 
 class UserRecipeAdapter(
     private val context: Context,
+    private val currentUserEmail: String,
     private val itemClickListener: OnRecipeClickListener
 ): RecyclerView.Adapter<UserRecipeAdapter.MainViewHolder>() {
 
@@ -21,26 +22,26 @@ class UserRecipeAdapter(
     private var dataList = mutableListOf<Recipe>()
 
     fun setListData(data: MutableList<Recipe>){
-        dataList = data
+        dataList = data.filter { it.user == currentUserEmail }.toMutableList()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.fragment_user_recipe, parent,false)
+        val view = LayoutInflater.from(context).inflate(R.layout.fragment_user_recipe, parent, false)
         return MainViewHolder(view)
     }
 
+
     override fun getItemCount(): Int {
-        if(dataList.size > 0){
-            return dataList.size
-        }else{
-            return 0
-        }
+        return dataList.size
     }
+
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val recipe = dataList[position]
         holder.bindView(recipe)
     }
+
 
     inner class MainViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         fun bindView(receta: Recipe){
