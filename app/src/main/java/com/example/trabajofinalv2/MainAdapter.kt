@@ -70,7 +70,7 @@ class MainAdapter(
                 guardarDatosRecetas(receta.user, receta.recipeName)
             }
             val checkBorrar = checkErase(itemView,receta.user,receta.recipeName)
-            val borrar = itemView.findViewById<Button>(R.id.borrar)
+            val borrar = itemView.findViewById<ImageButton>(R.id.borrar)
             borrar.setOnClickListener {
                 borrarDatosRecetas(receta.user, receta.recipeName)
             }
@@ -162,7 +162,7 @@ class MainAdapter(
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists() && snapshot.hasChild("recetasGuardadas")) {
                         val receta = snapshot.child("recetasGuardadas").value as ArrayList<String>
-                        val borrar = itemView.findViewById<Button>(R.id.borrar)
+                        val borrar = itemView.findViewById<ImageButton>(R.id.borrar)
                         val guardar = itemView.findViewById<ImageButton>(R.id.guardarboton)
                         if(usuario in receta && nombreReceta in receta){
                             borrar.visibility = View.VISIBLE
@@ -172,8 +172,11 @@ class MainAdapter(
                             guardar.visibility = View.VISIBLE
                         }
                     } else {
-                        val borrar = itemView.findViewById<Button>(R.id.borrar)
+                        val borrar = itemView.findViewById<ImageButton>(R.id.borrar)
+                        val guardar = itemView.findViewById<ImageButton>(R.id.guardarboton)
+
                         borrar.visibility = View.GONE
+                        guardar.visibility = View.VISIBLE
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
