@@ -16,4 +16,14 @@ class MainViewModel: ViewModel() {
         return mutableData
 
     }
+
+    fun fetchStoredRecipeData(): LiveData<MutableList<Recipe>>{
+        val mutableData = MutableLiveData<MutableList<Recipe>>()
+        repo.getStorageUserData().observeForever{
+            mutableData.value = it
+        }
+
+        return mutableData
+
+    }
 }
