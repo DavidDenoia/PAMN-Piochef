@@ -17,7 +17,14 @@ import androidx.viewpager2.widget.ViewPager2
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,11 +33,17 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 
-class PantallaPerfil : Fragment() {
+class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
 
     lateinit var fotoPerfil: ImageView
     lateinit var usernameText: TextView
     lateinit var userDescription: TextView
+    private var userEmail: String = ""
+
+    private lateinit var adapter:UserRecipeAdapter
+    private val viewModel by lazy{
+        ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +72,59 @@ class PantallaPerfil : Fragment() {
             fotoPerfil.setImageResource(R.drawable.placeholder_image)
         }
 
+        fun obtenerUserEmail(){
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            if (userId != null) {
+                val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+                databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists() && snapshot.hasChild("email")) {
+                            userEmail = snapshot.child("email").value.toString()
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+            }
+        }
+
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        adapter = UserRecipeAdapter(requireContext(), object : UserRecipeAdapter.OnRecipeClickListener{
+            override fun onRecipeClick(recipeName: String, user: String) {
+                obtainRecipeId(recipeName) { recipeId ->
+                    if (recipeId != null) {
+                        if(userEmail == user){
+                            val bundle = bundleOf(
+                                "recipeName" to recipeName,
+                                "recipeId" to recipeId
+                            )
+                            findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
+                        }
+                    } else {
+                    }
+                }
+            }
+        })
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recetasRecyclerView)
+        recyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView?.addItemDecoration(
+            DividerItemDecoration(requireContext(),
+                DividerItemDecoration.VERTICAL)
+        )
+        recyclerView?.adapter = adapter
+
+        observeData()
+
+    }
+    fun observeData(){
+        viewModel.fetchRecipeData().observe(viewLifecycleOwner, Observer {
+            adapter.setListData(it)
+            adapter.notifyDataSetChanged()
+        })
     }
 
     private fun showPopupMenu(view: View) {
@@ -128,6 +193,8 @@ private fun obtenerUsername(usernameText: TextView){
         })
     }}
 
+
+
 private fun obtenerDescription(descriptionText: TextView){
     val userId = FirebaseAuth.getInstance().currentUser?.uid
     if (userId != null) {
@@ -145,3 +212,26 @@ private fun obtenerDescription(descriptionText: TextView){
             }
         })
     }}
+
+private fun obtainRecipeId(recipeName: String, callback: (String?) -> Unit) {
+    val databaseReference = FirebaseDatabase.getInstance().getReference("recipes")
+
+    databaseReference.orderByChild("recipeName").equalTo(recipeName)
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (recipeSnapshot in dataSnapshot.children) {
+                        val recipeId = recipeSnapshot.key
+                        callback(recipeId)
+                        return
+                    }
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(null)
+            }
+        })
+}

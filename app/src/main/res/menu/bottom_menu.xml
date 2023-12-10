@@ -7,14 +7,9 @@
         android:title="Inicio"/>
 
     <item
-        android:id="@+id/nav_recetas"
-        android:icon="@drawable/buscar_recetas_icono"
-        android:title="Recetas" />
-
-    <item
-        android:id="@+id/nav_mi_lista"
-        android:icon="@drawable/mi_lista_icono"
-        android:title="Mi Lista" />
+        android:id="@+id/nav_add_recetas"
+        android:icon="@drawable/plus_square"
+        android:title="Nueva" />
 
     <item
         android:id="@+id/nav_cuenta"
