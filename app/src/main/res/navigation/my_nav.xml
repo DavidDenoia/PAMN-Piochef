@@ -88,9 +88,6 @@
         <action
             android:id="@+id/action_pantallaMenuInferior_to_verRecetas"
             app:destination="@id/verRecetas" />
-        <action
-            android:id="@+id/action_pantallaMenuInferior_to_guardarRecetas"
-            app:destination="@id/guardarRecetas" />
     </fragment>
     <fragment android:id="@+id/pantallaEditarPefil"
         android:name="com.example.trabajofinalv2.EditarPerfil"
@@ -142,11 +139,20 @@
         android:label="fragment_ver_recetas"
         tools:layout="@layout/fragment_verrecetas">
         <action
+
             android:id="@+id/action_verRecetas_to_pantallaprincipal"
             app:destination="@id/pantallaprincipal" />
         <action
             android:id="@+id/action_verRecetas_to_pantallaAnadirReceta"
             app:destination="@id/pantallaAnadirReceta" />
+
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
+            app:destination="@id/pantallaMenuInferior" />
+
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
+            app:destination="@id/pantallaMenuInferior" />
     </fragment>
     <fragment
         android:id="@+id/cambiarContraseña"
@@ -160,13 +166,6 @@
             android:id="@+id/action_cambiarContraseña_to_pantallaMenuInferior2"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>
-    <fragment android:id="@+id/guardarRecetas"
-        android:name="com.example.trabajofinalv2.PantallaGuardarRecetas"
-        android:label="fragment_guardarrecetas"
-        tools:layout="@layout/fragment_guardarrecetas" >
-        <action
-            android:id="@+id/action_guardarRecetas_to_pantallaMenuInferior"
-            app:destination="@id/pantallaMenuInferior" />
-    </fragment>
+
 
 </navigation>

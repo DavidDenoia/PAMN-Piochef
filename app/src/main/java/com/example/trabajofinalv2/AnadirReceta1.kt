@@ -147,7 +147,7 @@ class AnadirReceta1 : Fragment() {
 
 
 
-                findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2)
+            findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2)
         }
     }
 
