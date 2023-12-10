@@ -210,8 +210,7 @@ class VerRecetas : Fragment(R.layout.fragment_verrecetas) {
                             .addOnFailureListener { e ->
                                 Toast.makeText(context, "No se ha podido eliminar la receta", Toast.LENGTH_SHORT).show()
                             }
-                        findNavController().navigate(R.id.action_verRecetas_to_pantallaprincipal)
-                    }
+                        }
                     alertDialogBuilder.setNegativeButton("No") { dialog, which ->
                         Toast.makeText(context, "No se eliminará la receta", Toast.LENGTH_SHORT).show()
                     }

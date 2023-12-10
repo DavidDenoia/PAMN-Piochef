@@ -100,7 +100,8 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
                         if(userEmail == user){
                             val bundle = bundleOf(
                                 "recipeName" to recipeName,
-                                "recipeId" to recipeId
+                                "recipeId" to recipeId,
+                                "user" to user
                             )
                             findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
                         }
