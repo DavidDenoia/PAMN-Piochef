@@ -85,20 +85,15 @@
         <action
             android:id="@+id/action_pantallaMenuInferior_to_pantallaAnadirReceta"
             app:destination="@id/pantallaAnadirReceta" />
-
-        <action
-            android:id="@+id/action_pantallaAnadirReceta_to_pantallaAnadirReceta2"
-            app:destination="@id/pantallaAnadirReceta2" />
-        <action
-            android:id="@+id/action_pantallaAnadirReceta_to_pantallaAnadirReceta3"
-            app:destination="@id/pantallaAnadirReceta3" />
-
         <action
             android:id="@+id/action_pantallaMenuInferior_to_verRecetas"
             app:destination="@id/verRecetas" />
         <action
-            android:id="@+id/action_pantallaMenuInferior_to_guardarRecetas"
-            app:destination="@id/guardarRecetas" />
+            android:id="@+id/action_pantallaMenuInferior_to_verRecetas2"
+            app:destination="@id/verRecetas" />
+        <action
+            android:id="@+id/action_pantallaMenuInferior_to_guardarrecetas"
+            app:destination="@id/guardarrecetas" />
     </fragment>
     <fragment android:id="@+id/pantallaEditarPefil"
         android:name="com.example.trabajofinalv2.EditarPerfil"
@@ -160,7 +155,9 @@
         <action
             android:id="@+id/action_verRecetas_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
-
+        <action
+            android:id="@+id/action_verRecetas_to_pantallaMenuInferior2"
+            app:destination="@id/pantallaMenuInferior" />
     </fragment>
     <fragment
         android:id="@+id/cambiarContraseña"
@@ -174,13 +171,12 @@
             android:id="@+id/action_cambiarContraseña_to_pantallaMenuInferior2"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>
-
-    <fragment android:id="@+id/guardarRecetas"
+    <fragment android:id="@+id/guardarrecetas"
         android:name="com.example.trabajofinalv2.PantallaGuardarRecetas"
-        android:label="fragment_guardarrecetas"
+        android:label="fragment_pantalla_guardarrecetas"
         tools:layout="@layout/fragment_guardarrecetas" >
         <action
-            android:id="@+id/action_guardarRecetas_to_pantallaMenuInferior"
+            android:id="@+id/action_guardarrecetas_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
     </fragment>
 
