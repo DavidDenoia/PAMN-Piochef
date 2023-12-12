@@ -66,7 +66,7 @@ class AnadirReceta1 : Fragment() {
             if (!findNavController().navigateUp()){
                 if(isEnabled){
                     isEnabled = false
-                    findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaMenuInferior)
+                    findNavController().navigate(R.id.action_pantallaMenuInferior_to_pantallaAnadirReceta)
                 }
             }
         }

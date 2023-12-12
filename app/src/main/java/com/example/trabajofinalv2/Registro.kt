@@ -17,6 +17,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.database.IgnoreExtraProperties
 import android.util.Log
+import androidx.activity.addCallback
+
 @IgnoreExtraProperties
 data class User(val username: String? = null, val email: String? = null) {
     // Null default values create a no-argument default constructor, which is needed
@@ -69,7 +71,13 @@ class Registro : Fragment()
             findNavController().navigate(R.id.action_pantallaDeRegistro_to_pantallaDeInicio)
         }
 
-
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                }
+            }
+        }
         return view
     }
     private fun registrarUsuario(){

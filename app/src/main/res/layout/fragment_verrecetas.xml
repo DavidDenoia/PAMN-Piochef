@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -133,15 +129,21 @@
     <FrameLayout
         android:id="@+id/contenedorPreparacion"
         android:layout_width="411dp"
-        android:layout_height="272dp"
+        android:layout_height="232dp"
         android:layout_weight="1"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/botones">
-
+        <ScrollView
+            android:layout_width="411dp"
+            android:layout_height="232dp"
+            android:layout_weight="1"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/botones">
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="411dp"
+            android:layout_height="232dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -177,6 +179,7 @@
                 android:textColor="@color/custom_color_primary"/>
 
             </LinearLayout>
+        </ScrollView>
     </FrameLayout>
 
 
@@ -224,4 +227,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>

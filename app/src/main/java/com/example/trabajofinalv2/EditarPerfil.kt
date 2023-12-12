@@ -112,9 +112,7 @@ class EditarPerfil : Fragment(R.layout.fragment_editar_perfil) {
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
             if (!findNavController().navigateUp()){
                 if(isEnabled){
-                    findNavController().navigate(R.id.action_pantallaEditarPefil_to_pantallaMenuInferior)
                     isEnabled = false
-
                 }
             }
         }

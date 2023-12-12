@@ -43,8 +43,7 @@ class BottomNavigation : Fragment(R.layout.fragment_menu_inferior) {
             }
 
             R.id.nav_add_recetas -> {
-                val newFragment = AnadirReceta1()
-                setCurrentFragment(newFragment)
+                findNavController().navigate(R.id.action_pantallaMenuInferior_to_pantallaAnadirReceta)
                 return true
             }
 
