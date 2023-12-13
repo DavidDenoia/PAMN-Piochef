@@ -86,6 +86,12 @@
             android:id="@+id/action_pantallaMenuInferior_to_pantallaAnadirReceta"
             app:destination="@id/pantallaAnadirReceta" />
         <action
+            android:id="@+id/action_pantallaAnadirReceta_to_pantallaAnadirReceta2"
+            app:destination="@id/pantallaAnadirReceta2" />
+        <action
+            android:id="@+id/action_pantallaAnadirReceta_to_pantallaAnadirReceta3"
+            app:destination="@id/pantallaAnadirReceta3" />
+        <action
             android:id="@+id/action_pantallaMenuInferior_to_verRecetas"
             app:destination="@id/verRecetas" />
         <action

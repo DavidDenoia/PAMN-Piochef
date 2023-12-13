@@ -1,5 +1,6 @@
 package com.example.trabajofinalv2
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ktx.database
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
@@ -31,22 +33,25 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class AnadirReceta2 : Fragment() {
+class AnadirReceta2() : Fragment() {
 
 
     private var stepCount = 1
     //Crea un firebaseAuth object
 
     private val editTextsList = mutableListOf<EditText>()
-
-    private lateinit var nrac: String
-    private lateinit var tprep: String
-    private var ingList = ArrayList<IngredientesData>()
+    private var isEditing = false
+    private var recipeId: String? = null
+    private  var nrac: String?= null
+    private var tprep: String?= null
+    private var ingList: ArrayList<IngredientesData> = ArrayList<IngredientesData>()
     private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        isEditing = arguments?.getBoolean("isEditing") ?: false
+        recipeId = arguments?.getString("recipeId")
         // Inflate the layout for this fragment
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
             if (!findNavController().navigateUp()){
@@ -56,6 +61,11 @@ class AnadirReceta2 : Fragment() {
                 }
             }
         }
+
+        if(isEditing){
+            loadExistingRecipeData()
+        }
+
         return inflater.inflate(R.layout.fragment_anadir_receta_2, container, false)
         }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -211,15 +221,18 @@ class AnadirReceta2 : Fragment() {
 
 
     }
-    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>, userName: String, userImage: String){
+    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>, userName: String, userImage: String) {
         // Obtener la instancia de FirebaseAuth
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         val urls = uploadImagesAndGetURLs(imageUris)
-        if(user != null){
+
+        if (user != null) {
             val uid = user.uid
             Log.d("Firebase", "Usuario autenticado con UID: ${user.uid}")
             val databaseUserRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("users")
+            val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
+
             val recipeData = hashMapOf(
                 "recipeName" to recipeName,
                 "imageUrls" to urls,
@@ -233,24 +246,32 @@ class AnadirReceta2 : Fragment() {
                 "userImage" to userImage
             )
 
-            val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
-            //val databaseRef = FirebaseDatabase.getInstance().getReference("users/$uid/recipes")
-
-            val recipeId = databaseRef.push().key
-
-            recipeId?.let {
-                // Guardar los datos en la base de datos
-                databaseRef.child(it).setValue(recipeData)
-                    .addOnSuccessListener {
-                        Log.d("Firebase", "Datos guardados correctamente")
-                        // Manejar éxito, por ejemplo, navegando a otro fragmento
+            recipeId?.let { existingRecipeId ->
+                // Comprueba si la receta ya existe
+                databaseRef.child(existingRecipeId).get().addOnSuccessListener { dataSnapshot ->
+                    if (dataSnapshot.exists()) {
+                        databaseRef.child(existingRecipeId).updateChildren(recipeData)
+                            .addOnSuccessListener {
+                                Log.d("Firebase", "Datos actualizados correctamente")
+                                findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("Firebase", "Error al actualizar datos", e)
+                            }
+                    } else {
+                        databaseRef.child(existingRecipeId).setValue(recipeData)
+                            .addOnSuccessListener {
+                                Log.d("Firebase", "Datos guardados correctamente")
+                                findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("Firebase", "Error al guardar datos", e)
+                            }
                     }
-                    .addOnFailureListener { e ->
-                        Log.e("Firebase", "Error al guardar datos", e)
-                        // Manejar fallo
-                    }
+                }.addOnFailureListener { e ->
+                    Log.e("Firebase", "Error al verificar existencia de la receta", e)
+                }
             }
-            findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
         } else {
             Log.e("Firebase", "Usuario no autenticado")
             // Manejar caso de usuario no autenticado
@@ -298,5 +319,73 @@ class AnadirReceta2 : Fragment() {
         }
 
         return textosDePasos
+    }
+
+    private fun loadExistingRecipeData() {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("recipes").child(recipeId ?: "")
+        Log.d("AnadirReceta1", "Se carga la receta ${recipeId} ${isEditing}")
+        databaseReference!!.get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                nrac = dataSnapshot.child("numRations").getValue(String::class.java)
+                tprep = dataSnapshot.child("preparationTime").getValue(String::class.java)
+                ingList = dataSnapshot.child("ingredients").getValue(object : GenericTypeIndicator<ArrayList<IngredientesData>>() {})?: ArrayList()
+
+                updateUIWithData()
+            }
+        }.addOnFailureListener { exception ->
+            Log.e("AnadirReceta1", "Error al cargar datos de la receta: ${exception.message}")
+        }
+    }
+
+    private fun updateUIWithData() {
+        view?.findViewById<EditText>(R.id.tiempoInput)?.setText(tprep)
+        view?.findViewById<EditText>(R.id.racionesInput)?.setText(nrac)
+
+        Log.d("AnadirReceta1", "Error al cargar datos de la receta: ${ingList}")
+        val ingredientsLayout = view?.findViewById<LinearLayout>(R.id.stepsLayout)
+        ingredientsLayout?.removeAllViews()
+
+        if (ingList != null) {
+            for (ingredient in ingList!!) {
+                val newIngredient = LinearLayout(context)
+                newIngredient.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                ingredientsLayout?.orientation = LinearLayout.VERTICAL
+
+                val ingredientNameEditText = EditText(context)
+                ingredientNameEditText.layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1.0f
+                )
+                ingredientNameEditText.hint = "Nombre"
+                ingredientNameEditText.setText(ingredient.ingrediente)
+                newIngredient.addView(ingredientNameEditText)
+
+                val ingredientQuantityEditText = EditText(context)
+                ingredientQuantityEditText.layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1.0f
+                )
+                ingredientQuantityEditText.hint = "Cantidad"
+                ingredientQuantityEditText.setText(ingredient.cantidad)
+                newIngredient.addView(ingredientQuantityEditText)
+
+                val ingredientUnitEditText = EditText(context)
+                ingredientUnitEditText.layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1.0f
+                )
+                ingredientUnitEditText.hint = "Unidad"
+                ingredientUnitEditText.setText(ingredient.unidad)
+                newIngredient.addView(ingredientUnitEditText)
+
+                ingredientsLayout?.addView(newIngredient)
+            }
+        }
     }
 }

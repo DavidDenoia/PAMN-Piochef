@@ -221,7 +221,11 @@ class VerRecetas : Fragment(R.layout.fragment_verrecetas) {
             }
 
             editImageView.setOnClickListener{
-                findNavController().navigate(R.id.action_verRecetas_to_pantallaAnadirReceta)
+                val bundle = Bundle().apply {
+                    putBoolean("isEditing", true)
+                    putString("recipeId", recipeId)
+                }
+                findNavController().navigate(R.id.action_verRecetas_to_pantallaAnadirReceta, bundle)
                 Log.d("VerRecetas", "Se hizo clic en EditImageView")
             }
         }else{
