@@ -221,18 +221,15 @@ class AnadirReceta2() : Fragment() {
 
 
     }
-    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>, userName: String, userImage: String) {
+    private suspend fun registraValores(recipeName: String, imageUris: List<String>, recipeDescription: String, steps: List<String>, userName: String, userImage: String){
         // Obtener la instancia de FirebaseAuth
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         val urls = uploadImagesAndGetURLs(imageUris)
-
-        if (user != null) {
+        if(user != null){
             val uid = user.uid
             Log.d("Firebase", "Usuario autenticado con UID: ${user.uid}")
             val databaseUserRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("users")
-            val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
-
             val recipeData = hashMapOf(
                 "recipeName" to recipeName,
                 "imageUrls" to urls,
@@ -246,32 +243,24 @@ class AnadirReceta2() : Fragment() {
                 "userImage" to userImage
             )
 
-            recipeId?.let { existingRecipeId ->
-                // Comprueba si la receta ya existe
-                databaseRef.child(existingRecipeId).get().addOnSuccessListener { dataSnapshot ->
-                    if (dataSnapshot.exists()) {
-                        databaseRef.child(existingRecipeId).updateChildren(recipeData)
-                            .addOnSuccessListener {
-                                Log.d("Firebase", "Datos actualizados correctamente")
-                                findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("Firebase", "Error al actualizar datos", e)
-                            }
-                    } else {
-                        databaseRef.child(existingRecipeId).setValue(recipeData)
-                            .addOnSuccessListener {
-                                Log.d("Firebase", "Datos guardados correctamente")
-                                findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("Firebase", "Error al guardar datos", e)
-                            }
+            val databaseRef = Firebase.database("https://piochef-effb5-default-rtdb.europe-west1.firebasedatabase.app").getReference("recipes")
+            //val databaseRef = FirebaseDatabase.getInstance().getReference("users/$uid/recipes")
+
+            val recipeId = databaseRef.push().key
+
+            recipeId?.let {
+                // Guardar los datos en la base de datos
+                databaseRef.child(it).setValue(recipeData)
+                    .addOnSuccessListener {
+                        Log.d("Firebase", "Datos guardados correctamente")
+                        // Manejar éxito, por ejemplo, navegando a otro fragmento
                     }
-                }.addOnFailureListener { e ->
-                    Log.e("Firebase", "Error al verificar existencia de la receta", e)
-                }
+                    .addOnFailureListener { e ->
+                        Log.e("Firebase", "Error al guardar datos", e)
+                        // Manejar fallo
+                    }
             }
+            findNavController().navigate(R.id.action_pantallaAnadirReceta2_to_pantallaAnadirReceta3)
         } else {
             Log.e("Firebase", "Usuario no autenticado")
             // Manejar caso de usuario no autenticado

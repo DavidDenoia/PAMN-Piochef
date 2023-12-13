@@ -159,12 +159,17 @@ class AnadirReceta1 : Fragment() {
             sharedViewModel.recipeDescription.value = recipeDescription
             sharedViewModel.steps.value = stepsList
 
-
-
-            val bundle = Bundle().apply {
-                putBoolean("isEditing", true)
+            var bundle = Bundle().apply {
+                putBoolean("isEditing", false)
                 putString("recipeId", recipeId)
             }
+            if(recipeId != null){
+                bundle = Bundle().apply {
+                    putBoolean("isEditing", true)
+                    putString("recipeId", recipeId)
+                }
+            }
+
 
             findNavController().navigate(R.id.action_pantallaAnadirReceta_to_pantallaAnadirReceta2, bundle)
         }
