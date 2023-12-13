@@ -25,7 +25,7 @@ class MainAdapter(
 ): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     interface OnRecipeClickListener{
-        fun onRecipeClick(recipeName: String, user: String)
+        fun onRecipeClick(recipeName: String, user: String,email:String)
     }
     private var dataList = mutableListOf<Recipe>()
 
@@ -63,7 +63,7 @@ class MainAdapter(
             /*itemView.setOnClickListener{itemClickListener.onRecipeClick(receta.recipeName,receta.user)}*/
             val cardView = itemView.findViewById<CardView>(R.id.cardViewId)
             cardView.setOnClickListener {
-                itemClickListener.onRecipeClick(receta.recipeName, receta.user)
+                itemClickListener.onRecipeClick(receta.recipeName, receta.user,receta.email)
             }
             val guardar = itemView.findViewById<ImageButton>(R.id.guardarboton)
             guardar.setOnClickListener {

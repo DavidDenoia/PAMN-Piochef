@@ -41,6 +41,7 @@ class VerRecetas : Fragment(R.layout.fragment_verrecetas) {
     private var steps: TextView? = null
     private var ingredients: TextView? = null
     private var user: String? = null
+    private var email: String? = null
     private var recipeId: String? = null
     private lateinit var deleteImageView: ImageView
     private lateinit var editImageView: ImageView
@@ -67,6 +68,7 @@ class VerRecetas : Fragment(R.layout.fragment_verrecetas) {
 
         // Obtener datos de la receta
         user = arguments?.getString("user")
+        email = arguments?.getString("email")
         val recipeName = arguments?.getString("recipeName")
         recipeId = arguments?.getString("recipeId")
         val sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
@@ -190,7 +192,7 @@ class VerRecetas : Fragment(R.layout.fragment_verrecetas) {
     }
     private fun checkUserSession(){
         val currentUser = FirebaseAuth.getInstance().currentUser?.email
-        if(currentUser != null && user==currentUser){
+        if(currentUser != null && email==currentUser){
             deleteImageView.visibility = View.VISIBLE
             editImageView.visibility = View.VISIBLE
 

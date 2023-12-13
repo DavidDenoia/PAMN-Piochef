@@ -54,12 +54,13 @@ class PantallaPrincipal : Fragment(R.layout.fragment_pantalla_principal) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = MainAdapter(requireContext(), object : MainAdapter.OnRecipeClickListener{
-            override fun onRecipeClick(recipeName: String, user: String) {
+            override fun onRecipeClick(recipeName: String, user: String,email:String) {
                 obtainRecipeId(recipeName) { recipeId ->
                     if (recipeId != null) {
                         val bundle = bundleOf(
                             "recipeName" to recipeName,
                             "user" to user,
+                            "email" to email,
                             "recipeId" to recipeId
                         )
 

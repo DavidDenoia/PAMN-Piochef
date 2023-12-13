@@ -178,6 +178,9 @@
         <action
             android:id="@+id/action_guardarrecetas_to_pantallaMenuInferior"
             app:destination="@id/pantallaMenuInferior" />
+        <action
+            android:id="@+id/action_guardarrecetas_to_verRecetas"
+            app:destination="@id/verRecetas" />
     </fragment>
 
 </navigation>

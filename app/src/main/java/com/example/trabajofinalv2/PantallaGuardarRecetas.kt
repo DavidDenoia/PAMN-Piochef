@@ -63,16 +63,18 @@ class PantallaGuardarRecetas : Fragment(R.layout.fragment_pantalla_principal) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = MainAdapter(requireContext(), object : MainAdapter.OnRecipeClickListener{
-            override fun onRecipeClick(recipeName: String, user: String) {
+            override fun onRecipeClick(recipeName: String, user: String,email: String) {
                 obtainRecipeId(recipeName) { recipeId ->
                     if (recipeId != null) {
                         val bundle = bundleOf(
                             "recipeName" to recipeName,
                             "user" to user,
-                            "recipeId" to recipeId
+                            "email" to email,
+                            "recipeId" to recipeId,
+
                         )
 
-                        findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
+                        findNavController().navigate(R.id.action_guardarrecetas_to_verRecetas, bundle)
                     } else {
                         // Manejar el caso en el que no se encontró ninguna receta con ese nombre
                     }

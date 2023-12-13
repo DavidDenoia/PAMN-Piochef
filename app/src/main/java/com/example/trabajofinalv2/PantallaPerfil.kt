@@ -100,22 +100,21 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
             val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
             databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists() && snapshot.hasChild("username")) {
+                    if (snapshot.exists() && snapshot.hasChild("username") && snapshot.hasChild("email")) {
                         val username = snapshot.child("username").value.toString()
+                        val emailnow = snapshot.child("email").value.toString()
                         Log.d("a",username)
-                        adapter = UserRecipeAdapter(requireContext(), username, object : UserRecipeAdapter.OnRecipeClickListener{
-                            override fun onRecipeClick(recipeName: String, user: String) {
+                        adapter = UserRecipeAdapter(requireContext(), emailnow, object : UserRecipeAdapter.OnRecipeClickListener{
+                            override fun onRecipeClick(recipeName: String, user: String,email:String) {
                                 obtainRecipeId(recipeName) { recipeId ->
                                     if (recipeId != null) {
-                                        if(username == user){
-                                            val bundle = bundleOf(
-                                                "recipeName" to recipeName,
-                                                "recipeId" to recipeId,
-                                                "user" to user
-                                            )
-                                            findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
-                                        }
-
+                                        val bundle = bundleOf(
+                                            "recipeName" to recipeName,
+                                            "recipeId" to recipeId,
+                                            "email" to email,
+                                            "user" to user
+                                        )
+                                        findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
                                     } else {
                                     }
                                 }

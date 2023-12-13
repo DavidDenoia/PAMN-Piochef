@@ -50,9 +50,10 @@ class Repo {
                         val imageUrl = imageUrls?.firstOrNull() ?: "https://i.postimg.cc/d3DwfWKn/circulo-Pio-Chef.png"
 
                         val user = recipeSnapshot.child("userName").getValue(String::class.java)
+                        val email = recipeSnapshot.child("user").getValue(String::class.java)
                         val recipeName = recipeSnapshot.child("recipeName").getValue(String::class.java)
-                        if (user != null && recipeName != null) {
-                            val recipe = Recipe(user, imageUrl, recipeName)
+                        if (user != null && recipeName != null && email != null) {
+                            val recipe = Recipe(user,email, imageUrl, recipeName)
                             listData.add(recipe)
                             Log.d("RecipeCreation", "Recipe created: User = $user, ImageUrl = $imageUrl, RecipeName = $recipeName")
                         }
@@ -118,15 +119,16 @@ class Repo {
                                         val imageUrl = imageUrls?.firstOrNull() ?: "https://i.postimg.cc/d3DwfWKn/circulo-Pio-Chef.png"
 
                                         val user = recipeSnapshot.child("userName").getValue(String::class.java)
+                                        val email = recipeSnapshot.child("user").getValue(String::class.java)
                                         val recipeName = recipeSnapshot.child("recipeName").getValue(String::class.java)
-                                        if (user != null && recipeName != null) {
+                                        if (user != null && recipeName != null && email != null) {
                                             Log.e("a",recipeName)
                                             for(a in dataReference){
                                                 Log.e("a",a)
                                             }
                                             if (recipeName in dataReference){
 
-                                                val recipe = Recipe(user, imageUrl, recipeName)
+                                                val recipe = Recipe(user,email, imageUrl, recipeName)
                                                 listData.add(recipe)
                                                 Log.d("RecipeCreation", "Recipe created: User = $user, ImageUrl = $imageUrl, RecipeName = $recipeName")
                                             }
