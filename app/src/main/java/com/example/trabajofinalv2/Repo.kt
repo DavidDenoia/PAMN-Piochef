@@ -49,7 +49,7 @@ class Repo {
                         val imageUrls = recipeSnapshot.child("imageUrls").getValue(object : GenericTypeIndicator<List<String>>(){})
                         val imageUrl = imageUrls?.firstOrNull() ?: "https://i.postimg.cc/d3DwfWKn/circulo-Pio-Chef.png"
 
-                        val user = recipeSnapshot.child("user").getValue(String::class.java)
+                        val user = recipeSnapshot.child("userName").getValue(String::class.java)
                         val recipeName = recipeSnapshot.child("recipeName").getValue(String::class.java)
                         if (user != null && recipeName != null) {
                             val recipe = Recipe(user, imageUrl, recipeName)
@@ -117,7 +117,7 @@ class Repo {
                                         val imageUrls = recipeSnapshot.child("imageUrls").getValue(object : GenericTypeIndicator<List<String>>(){})
                                         val imageUrl = imageUrls?.firstOrNull() ?: "https://i.postimg.cc/d3DwfWKn/circulo-Pio-Chef.png"
 
-                                        val user = recipeSnapshot.child("user").getValue(String::class.java)
+                                        val user = recipeSnapshot.child("userName").getValue(String::class.java)
                                         val recipeName = recipeSnapshot.child("recipeName").getValue(String::class.java)
                                         if (user != null && recipeName != null) {
                                             Log.e("a",recipeName)

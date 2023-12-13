@@ -3,6 +3,7 @@ package com.example.trabajofinalv2
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -39,7 +40,7 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
     lateinit var usernameText: TextView
     lateinit var userDescription: TextView
     private var userEmail: String = obtenerUserEmail()
-
+    
     private lateinit var adapter:UserRecipeAdapter
     private val viewModel by lazy{
         ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
@@ -93,32 +94,50 @@ class PantallaPerfil : Fragment(R.layout.fragment_pantalla_perfil) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = UserRecipeAdapter(requireContext(), userEmail, object : UserRecipeAdapter.OnRecipeClickListener{
-            override fun onRecipeClick(recipeName: String, user: String) {
-                obtainRecipeId(recipeName) { recipeId ->
-                    if (recipeId != null) {
-                        if(userEmail == user){
-                            val bundle = bundleOf(
-                                "recipeName" to recipeName,
-                                "recipeId" to recipeId,
-                                "user" to user
-                            )
-                            findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
-                        }
-                    } else {
+        Log.d("a",usernameText.text.toString())
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.hasChild("username")) {
+                        val username = snapshot.child("username").value.toString()
+                        Log.d("a",username)
+                        adapter = UserRecipeAdapter(requireContext(), username, object : UserRecipeAdapter.OnRecipeClickListener{
+                            override fun onRecipeClick(recipeName: String, user: String) {
+                                obtainRecipeId(recipeName) { recipeId ->
+                                    if (recipeId != null) {
+                                        if(username == user){
+                                            val bundle = bundleOf(
+                                                "recipeName" to recipeName,
+                                                "recipeId" to recipeId,
+                                                "user" to user
+                                            )
+                                            findNavController().navigate(R.id.action_pantallaMenuInferior_to_verRecetas, bundle)
+                                        }
+
+                                    } else {
+                                    }
+                                }
+                            }
+                        })
+                        val recyclerView = view?.findViewById<RecyclerView>(R.id.recetasRecyclerView)
+                        recyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
+                        recyclerView?.addItemDecoration(
+                            DividerItemDecoration(requireContext(),
+                                DividerItemDecoration.VERTICAL)
+                        )
+                        recyclerView?.adapter = adapter
+
+                        observeData()
                     }
                 }
-            }
-        })
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recetasRecyclerView)
-        recyclerView?.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView?.addItemDecoration(
-            DividerItemDecoration(requireContext(),
-                DividerItemDecoration.VERTICAL)
-        )
-        recyclerView?.adapter = adapter
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        }
 
-        observeData()
+
 
     }
     fun observeData(){

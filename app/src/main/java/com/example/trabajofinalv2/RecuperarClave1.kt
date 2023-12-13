@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -67,6 +68,13 @@ class RecuperarClave1: Fragment() {
         btnCancel.setOnClickListener {
 
             findNavController().navigate(R.id.action_pantallaClave1_to_pantallaDeInicio)
+        }
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this){
+            if (!findNavController().navigateUp()){
+                if(isEnabled){
+                    isEnabled = false
+                }
+            }
         }
         return view
     }
